@@ -1,0 +1,70 @@
+<section class="photo_section_name my-5">
+    <div class="container container-fluid container-md">
+        <div class="row col col-12">
+            <h2 class="text-center mb-4">Vítejte na mých webových stránkách. </h2>
+            <p>
+              Mé jméno je Tomáš a jsem vášnivým fotografem. 
+              Ať už chcete vyfotit portrétní fotografie, párové nebo třeba svého mazlíčka, neváhejte mě kontaktovat. 
+              Na jakékoliv dotazy Vám velmi rád odpovím. 
+              Budu se na Vás těšit a doufám, že i vy budete mít zážitek a krásné fotky.
+              Děkuji všem za zájem.
+            </p>
+        </div>
+        <div class="row col col-12"></div>
+    </div>
+</section>
+<!-- forEach(photoIndex)?? -->
+<section class="section_gallery my-5">
+    <div class="container gallery grid_wrapper">
+        <div class=" gallery_col ">
+          <a href="" data-lightbox="mygallery">
+            <img src="" alt="" class="gallery_item">
+          </a>
+        </div>
+    </div>
+</section>
+<section class="section_aboutme">
+    <div class="container mx-auto my-4 bg-info">
+        <div class="row ">
+            <div class="col col-12 col-md-6 about_me_col">
+                <div class="row py-2">
+                  <div class="col">
+                    <h1>O mně</h1>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <p>
+                      Moje jméno je Tomáš Rybenský a jsem svářeč. Ale nebojte se, sváry nefotím. Fotím štěstí, lásku a úsměvy. 
+                      K fotografování jsem se už dostal jako malý kluk, ale věnovat jsem se tomu začal okolo roku 2017. 
+                      Tehdy jsem si pořídil svůj první foťák Canon. Naplno jsem se tomu začal věnovat 
+                      při pořízení našeho chrta. Doladil jsem si techniku a vyráželi jsme ven zachytávat momenty při tréninku. 
+                      Poté se začali ozývat i lidé na portrétní focení. A to nadšení a vášeň mi zůstala. Nyní již zachytávám momenty a příběhy skrz objektiv.
+                   </p>
+                   <p>A tyto momenty nabízím i Vám. Neváhejte mne proto kontaktovat.</p>
+                   <p>Působím hlavně v Pardubickém kraji, ale po domluvě se mohu vydat i na delší cestu za Vámi. Cestování je má druhá vášeň, tak je možnost skloubit příjemné s užitečným.</p>
+                   <p>Děkuji za Vaši důvěru a budu se velmi těšit na spolupráci.</p>
+                  </div>
+                </div>
+            </div>
+            <div class="col col-12 col-md-6 text-center my-auto pe-md-0 hero_img_col">
+                <img src="https://images.pexels.com/photos/2150/sky-space-dark-galaxy.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt=""  class="hero_image_aboutMe"  >
+            </div>
+        </div>
+    </div>
+</section>
+<section class="form my-4">
+    <div class="container border border-2 border-dark rounded-4 bg-light mx-auto">
+        <div class="row">
+            <div class="col col-12 mt-3">
+                <h3 class="text-center">Kontaktní formulář</h3>
+                <p>Chcete párové fotky, rodinné s dětmi, či prostě jen památku na svého mazlíčka? 
+                  Nebo něco úplně jiného? Neváhejte mne kontaktovat skrze formulář níže. Spojím se s Vámi a domluvíme všechny podrobnosti.
+                </p>
+            </div>
+        </div>
+        <form class="row g-3 needs-validation " method="post" enctype="multipart/form-data" action="/send" id="contactForm">
+          <%- include('./partials/_contact_form.ejs') %>
+        </form>
+    </div>
+</section>

@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg bg-primary">
+    <div class="container-fluid">
+        <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#adminNavBar" aria-controls="adminNavBar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="adminNavBar">
+            <div class="navbar-nav text-center">
+            <a class="nav-link text-light " href="/admin/dashboard">Home page</a>
+            <a class="nav-link text-light ms-lg-3" href="/admin/animalphotos">Fotky zvířat</a>
+            <a class="nav-link text-light ms-lg-3" href="/admin/pairphotos">Fotky párů</a>
+            <a class="nav-link text-light ms-lg-3" href="/admin/other">Ostatní fotky</a>
+            <div class="nav-item d-lg-none">
+                <%- include('./_logout_form.ejs') %>
+            </div>
+            </div>
+        </div>
+        <div class="d-none d-lg-flex">
+            <%- include('./_logout_form.ejs') %>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,8 @@
+<div id="image-gallery" class="sortable-gallery galleryUploadForm">
+    <% photos.forEach((photo) => { %>
+      <div class="image-container" data-id="<%= photo._id %>" data-order="<%= photo.order %>">
+        <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="Image <%= photo._id %>" class="imgUpdateForm">
+      </div>
+    <% }); %>
+  </div>
+  

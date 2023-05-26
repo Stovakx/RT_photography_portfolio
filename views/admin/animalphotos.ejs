@@ -1,0 +1,54 @@
+<header>
+    <%- include('./admin_header.ejs') %>
+</header>
+<section class="uploadPhotos mt-5">
+    <div class="container uploadDelete_container">
+        <div class="row">
+            <div class="col-md-6 d-flex justify-content-center">
+                <div class="uploadform">
+                    <form action="">
+                        <%- include('./_upload_form.ejs') %> wetrt
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-danger">Cancel</button>
+                                <button class="btn btn-success">Upload</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex justify-content-center">
+                <div class="deleteform">
+                    <form action="">
+                        <%- include('./_delete_form.ejs') %> tweewt
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-danger">Cancel</button>
+                                <button class="btn btn-success">Delete</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="orderOnPage">
+    <div class="container d-flex justify-content-center">
+        <div class="row">
+            <div class="col">
+                <div class="updateform">
+                    <form action="">
+                        <%- include('./_update_form.ejs') %>
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-danger">Cancel</button>
+                                <button class="btn btn-success">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

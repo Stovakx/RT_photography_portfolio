@@ -1,0 +1,54 @@
+<header>
+    <%- include('./admin_header.ejs') %>
+</header>
+<section class="dashboard mt-5">
+    <div class="container uploadDelete_container">
+        <div class="row">
+            <div class="col-md-6 d-flex justify-content-center"> 
+                <div class="d-flex flex-column upload_form">
+                    <form method="POST" action="/admin/dashboard/upload" id="uploadForm" enctype="multipart/form-data">
+                        <%- include('./_upload_form.ejs') %> 
+                        <div class="row mt-auto ">
+                            <div class="col ">
+                                <div class="d-flex justify-content-end ">
+                                    <button class="btn btn-danger me-2">Cancel</button>
+                                    <button class="btn btn-success">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>   
+            </div>
+            <div class="col-md-6 d-flex justify-content-center">
+                <div class="delete_form mt-4 mt-md-0 d-flex">
+                    <form action="/admin/dashboard/delete?_method=DELETE" method="delete" id="deleteForm">
+                            <%- include('./_delete_form.ejs') %>
+                        <div class="row mt-3">
+                            <div class="col-12 btn_col d-flex justify-content-end">
+                                <button class="btn btn-danger me-2" type="button">Cancel</button>
+                                <button class="btn btn-success " type="submit">Delete</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5 d-flex justify-content-center">
+        <div class="row">
+            <div class="col">
+                <div class="updateform mb-2">
+                    <form action="admin/dashboard/update?">
+                        <%- include('./_update_form.ejs') %>
+                        <div class="row mt-2">
+                            <div class="col d-flex justify-content-end">
+                                <button class="btn btn-danger me-2" type="reset">Cancel</button>
+                                <button class="btn btn-success me-2" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
