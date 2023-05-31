@@ -1,5 +1,6 @@
+
 //image preview when clicked on reset button, img preview doesn't clear src
-/* const uploadInput = document.getElementById('image-input');
+const uploadInput = document.getElementById('image-input');
 const previewImage = document.getElementById('preview-image');
 const cancelButton = document.getElementById('cancelButton');
 
@@ -13,15 +14,15 @@ uploadInput.addEventListener('change', function(event) {
 
   reader.readAsDataURL(file);
 });
-//delete preview image to empty src doesn't work atm
+
 cancelButton.addEventListener('click', function() {
-  uploadInput.value = null;
-  previewImage.src = '';
+  uploadInput.value = null; // Clear the file input by setting its value to null
+  previewImage.src = ''; // Clear the preview image by setting its source to an empty string
 });
- */
+
 //uploading photos
 const uploadForm = document.getElementById('uploadForm');
-
+console.log('Upload event listener attached')
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   try {
@@ -71,7 +72,7 @@ logoutButton.addEventListener('click', () => {
 
 // delete photos from website folder and from db
 const deleteForm = document.getElementById('deleteForm');
-console.log('Event listener attached');
+console.log('Delete Event listener attached');
 
 // Attach an event listener to the form submission
 deleteForm.addEventListener('submit', async function(event) {
@@ -98,11 +99,10 @@ deleteForm.addEventListener('submit', async function(event) {
   }
 });
 
-
 //gallery delete form
 const deleteFormGallery = () => {
   const availableImages = [];
-  const galleryDivs = document.querySelectorAll('.galleryDeleteForm');
+  const galleryDivs = document.querySelectorAll('.galleryDiv');
   galleryDivs.forEach((galleryDiv) => {
     const image = galleryDiv.querySelector('.imgDeleteForm');
     if (image) {
@@ -120,30 +120,65 @@ const deleteFormGallery = () => {
   }
   const createGallery = () => {
     const galleryDivs = document.querySelectorAll('.galleryDiv');
-    const Gallery = document.getElementById('gallery');
-    let rowWidth = 0;
-    let rowIndex = 0;
-    for (let i = 0; i < imgWidths.length; i++) {
-      const photo = new Image();
-      photo.src = '../uploads/index';
-      photo.width = imgWidths[i];
-      photo.classList.add('formGalleryImg');
-      Gallery.appendChild(photo);
-      rowWidth += imgWidths[i];
-      if (rowWidth >= galleryDivs[i].clientWidth) {
-        rowWidth = 0;
-        rowIndex++;
+    for (let i = 0; i < galleryDivs.length; i++) {
+      const galleryDiv = galleryDivs[i];
+      const photo = galleryDiv.querySelector('.imgDeleteForm');
+      if (photo) {
+        const imgSrc = photo.getAttribute('src');
+        const imgAlt = photo.getAttribute('alt');
+        const imgWidth = photo.getAttribute('width');
+        const newImage = new Image();
+        newImage.src = imgSrc;
+        newImage.alt = imgAlt;
+        newImage.width = imgWidth;
+        newImage.classList.add('formGalleryImg');
+        galleryDiv.appendChild(newImage);
       }
     }
   };
+  
   createGallery();
 };
-deleteFormGallery()
 
-//gallery upload form
-const uploadFormGallery = () => {
+document.addEventListener('DOMContentLoaded', () => {
+  deleteFormGallery();
+});
+
+
+
+//update to gallery(works fine)
+const updateForm = document.getElementById('updateForm');
+console.log('Update Event listener attached');
+
+// Attach an event listener to the form submission
+updateForm.addEventListener('submit', async function(event) {
+  event.preventDefault(); // Prevent the default form submission
+
+  // Get the selected checkboxes
+  const checkboxes = document.querySelectorAll('.checkboxUpdateForm:checked');
+  const photoIds = Array.from(checkboxes).map(checkbox => checkbox.value);
+  console.log(photoIds)
+  // Create an AJAX request
+  const response = await fetch('/admin/dashboard/update', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ photoIds })
+  });
+
+  console.log(response);
+
+  if (response.ok) {
+    window.location.reload();
+    console.log('Photos gallery updated successfully');
+  } else {
+    console.log('Something went wrong');
+  }
+});
+
+//gallery update form (works fine)
+const updateFormGallery = () => {
   const availableImages = [];
-  const galleryDivs = document.querySelectorAll('.galleryDeleteForm');
+  const galleryDivs = document.querySelectorAll('.galleryDiv');
   galleryDivs.forEach((galleryDiv) => {
     const image = galleryDiv.querySelector('.imgUpdateForm');
     if (image) {
@@ -160,51 +195,63 @@ const uploadFormGallery = () => {
     imgWidths.push(width);
   }
   const createGallery = () => {
-    const galleryDivs = document.querySelectorAll('.image-container');
-    const Gallery = document.getElementById('image-gallery');
-    let rowWidth = 0;
-    let rowIndex = 0;
-    for (let i = 0; i < imgWidths.length; i++) {
-      const photo = new Image();
-      photo.src = '../uploads/index';
-      photo.width = imgWidths[i];
-      photo.classList.add('formGalleryImg');
-      Gallery.appendChild(photo);
-      rowWidth += imgWidths[i];
-      if (rowWidth >= galleryDivs[i].clientWidth) {
-        rowWidth = 0;
-        rowIndex++;
+    const galleryDivs = document.querySelectorAll('.galleryDiv');
+    for (let i = 0; i < galleryDivs.length; i++) {
+      const galleryDiv = galleryDivs[i];
+      const photo = galleryDiv.querySelector('.imgDeleteForm');
+      if (photo) {
+        const imgSrc = photo.getAttribute('src');
+        const imgAlt = photo.getAttribute('alt');
+        const imgWidth = photo.getAttribute('width');
+        const newImage = new Image();
+        newImage.src = imgSrc;
+        newImage.alt = imgAlt;
+        newImage.width = imgWidth;
+        newImage.classList.add('formGalleryImg');
+        galleryDiv.appendChild(newImage);
       }
     }
   };
   createGallery();
 };
-uploadFormGallery()
+document.addEventListener('DOMContentLoaded', ()=> {
+  updateFormGallery()
+})
 
-//sortable.js
-const gallery = document.getElementById('image-gallery');
-const sortable = sortable.create(gallery, {
-  animation: 150, // Duration of the animation in milliseconds
-  handle: '.image-container', // Restrict dragging to the image containers
-  onEnd: function (event) {
-    // Get the new order of the images
-    const newOrder = Array.from(gallery.getElementsByClassName('image-container')).map(function (element, index) {
-      element.setAttribute('data-order', index + 1);
-      return {
-        id: element.getAttribute('data-id'),
-        order: index + 1
-      };
-    });
+//update order of specific gallery (masonry layout or something like that?)
+const updateOrderInGalleryForm = document.getElementById('orderGalleryUpdateForm')
+console.log('Order gallery update listener attached')
 
-    // Perform an AJAX request to update the image order on the server
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/update', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        console.log('Image order updated successfully.');
-      }
-    };
-    xhr.send(JSON.stringify(newOrder));
+//attach listener
+updateOrderInGalleryForm.addEventListener('submit', async (event) =>{
+  event.preventDefault();
+
+})
+//sortable js 
+const orderGalleryContainer = document.getElementById('photoSortableContainer')
+Sortable.create(orderGalleryContainer, {
+  onEnd: function(evt){
+    //Get updated photo order after dragging
+    const updatedOrder = Array.from(orderGalleryContainer.querySelectorAll('.galleryDiv')).map((div)=>
+      div.getAttribute('data-photo-id')
+    )
+
+    //ajax request, send updatedOreder Array to server side for update order
+    //Using fetch
+    fetch('/admin/dashboard/updategalleryorder', {
+      method: 'PUT',
+      headers: {
+        'Conten-Type': 'application/json',
+      },
+      body: JSON.stringify({ order: updatedOrder}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error)=> {
+      console.log(error)
+    })
   }
-});
+})
+//rewrite galleries for update and delete to one gallery function and just use in specific gallery

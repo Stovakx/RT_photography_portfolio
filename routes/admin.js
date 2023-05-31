@@ -104,12 +104,12 @@ router.post('/dashboard/upload', adminUpload.single('image'), async (req, res) =
 });
 //delete action
 router.delete('/dashboard/delete', async (req, res) => {
+
   const { photoIds } = req.body;
-  console.log('Delete route reached');
   console.log(photoIds)
   try {
     // Find the photos in the database
-    const photos = await Photo.find({ _id: { $in: photoIds } });
+    const photos = await Photo.find({ _id: { $in: photoIds } }).sort(Date);
 
     if (photos.length === 0) {
       return res.status(404).json({ error: 'Photos not found' });
@@ -123,7 +123,7 @@ router.delete('/dashboard/delete', async (req, res) => {
 
     // Remove the photos from the database
     await Photo.deleteMany({ _id: { $in: photoIds } });
-
+    res.render('admin/dashboard', { photos, photoIds, photoBasePath: Photo.photoBasePath });
     res.status(200).json({ message: 'Photos deleted successfully' });
   } catch (err) {
     console.error(err);
@@ -131,31 +131,21 @@ router.delete('/dashboard/delete', async (req, res) => {
   }
 });
 //update order of images (need to be completed)
-router.post('/update', async (req, res) => {
-  const { id, newOrder } = req.body;
-
+router.put('/dashboard/update', async (req, res) => {
   try {
-    const photo = await Photo.findById(id);
+    const photoIds = req.body.photoIds;
+    const order = req.body.order; 
+    console.log(photoIds, order)
+    // Update the gallery and order for the selected photos
+    await Photo.updateMany({ _id: { $in: photoIds } }, { $set: { order: order, gallery: 'galleryIndexPage' } });
 
-    if (photo) {
-      const updatedImage = photo.gallery.find((img) => img._id.equals(id));
+    // Retrieve the updated photos
+    const photos = await Photo.find({ _id: { $in: photoIds } });
 
-      if (updatedImage) {
-        updatedImage.order = parseInt(newOrder);
-
-        // Sort the images based on the new order
-        photo.gallery.sort((a, b) => a.order - b.order);
-
-        await photo.save();
-        res.status(200).json({ message: 'Image order updated successfully.' });
-      } else {
-        res.status(404).json({ message: 'Image not found in the gallery.' });
-      }
-    } else {
-      res.status(404).json({ message: 'Image not found.' });
-    }
-  } catch (err) {
-    res.status(500).json({ message: 'An error occurred while updating the image order.' });
+    res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath });
+  } catch (error) {
+    // Handle the error
+    console.error(error);
   }
 });
 
@@ -169,7 +159,7 @@ router.get('/animalphotos',checkAuthentication, async(req, res) => {
     //change to animalphotos model
     const photoBasePath = Photo.photoBasePath;
     const photos = await Photo.find()
-    res.render('admin/animalphotos', {photos})
+    res.render('admin/animalphotos', {photos, photoBasePath})
   } catch (error) {
     console.error(error);
     res.render('admin/index', { error: 'Admin panel je zrovna nefunkční.'});
@@ -185,7 +175,7 @@ router.get('/pairphotos',checkAuthentication, async(req, res) => {
     //change to pairphotos model
     const photoBasePath = Photo.photoBasePath;
     const photos = await Photo.find()
-    res.render('admin/pairphotos', {photos})
+    res.render('admin/pairphotos', {photos, photoBasePath})
   } catch (error) {
     console.error(error);
     res.render('admin/index', { error: 'Admin panel je zrovna nefunkční.'});
@@ -201,7 +191,7 @@ router.get('/other',checkAuthentication, async(req, res) => {
     //change to other model
     const photoBasePath = Photo.photoBasePath;
     const photos = await Photo.find()
-    res.render('admin/other', {photos})
+    res.render('admin/other', {photos, photoBasePath})
   } catch (error) {
     console.error(error);
     res.render('admin/index', { error: 'Admin panel je zrovna nefunkční.'});

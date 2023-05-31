@@ -1,0 +1,15 @@
+<% if (photos && photos.length > 0) { %>
+    <div  id="photoSortableContainer" <% if (photos.length === 0) { %>style="display: none;"<% } %>>
+      <% photos.forEach((photo, index) => { %>
+        <% if (photo.gallery.includes('galleryIndexPage')) { %>
+          <div class="galleryDiv">
+            <div class="input-group">
+                <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
+            </div>
+          </div>
+        <% } %>
+      <% }); %>
+    </div>
+  <% } %>
+  <input type="hidden" name="_method" value="PUT">
+  

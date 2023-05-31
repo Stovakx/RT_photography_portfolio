@@ -34,6 +34,7 @@
     "nodejs": "^0.0.0",
     "nodemailer": "^6.9.1",
     "override": "^0.0.1",
+    "packery": "^2.1.2",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "requirejs": "^2.3.6",

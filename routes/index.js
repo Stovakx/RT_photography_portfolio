@@ -1,6 +1,6 @@
 const express = require('express')
-const app = express()
 const router = express.Router()
+const Photo = require('../models/photos')
 //sending email modules
 const nodemailer = require('nodemailer')
 const multiparty = require('multiparty')
@@ -14,7 +14,9 @@ router.use((req, res, next) => {
 router.get('/', async (req, res) => {
   //gallery photos from model
     try{
-      res.render('index')
+      const photoBasePath = Photo.photoBasePath
+      const photos = await Photo.find()
+      res.render('index', {photos, photoBasePath})
     }catch{}
   })
 

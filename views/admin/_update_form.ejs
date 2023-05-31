@@ -1,8 +1,20 @@
-<div id="image-gallery" class="sortable-gallery galleryUploadForm">
-    <% photos.forEach((photo) => { %>
-      <div class="image-container" data-id="<%= photo._id %>" data-order="<%= photo.order %>">
-        <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="Image <%= photo._id %>" class="imgUpdateForm">
-      </div>
+<div class="galleryUpdateForm">
+  <% if (photos && photos.length > 0) { %>
+    <% photos.forEach((photo, index) => { %>
+      <% if (photo.gallery !== 'galleryIndexPage') { %>
+        <div class="galleryDiv">
+          <div class="input-group">
+            <input name="photoIds" value="<%= photo._id.toString() %>" type="checkbox" id="checkboxUpdate<%= index %>" class="checkboxUpdateForm"/>
+            <label for="checkboxUpdate<%= index %>">
+              <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
+            </label>
+          </div>
+        </div>
+      <% } %>
     <% }); %>
-  </div>
-  
+  <% }%>
+</div>
+
+
+
+
