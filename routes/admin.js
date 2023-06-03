@@ -2,17 +2,18 @@ const express = require('express')
 const router = express.Router()
 const Admin = require('../models/admin')
 const Photo = require('../models/photos')
+const GalleryPhotoSchema = require('../models/galleryPhotoSchema')
+const Gallery = require('../models/gallery') 
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
-const uploadPath = path.join('public', Photo.photoBasePath);
-const photoMimeTypes = ['image/jpeg', 'image/png'];
+const uploadPath = path.join('public' ,Photo.photoBasePath);
+const photoMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
 const adminUpload = multer({
   dest: uploadPath,
   fileFilter: (req, file, callback) => {
     callback(null, photoMimeTypes.includes(file.mimetype))
   },
-  /* limits: { fieldSize: 10 * 1024 * 1024 } */ // Adjust the field size limit as needed
 });
 //setting layout for this route
 router.use((req, res, next) => {
@@ -30,10 +31,11 @@ const checkAuthentication = (req, res, next) => {
     res.redirect('/admin');
   }
 };
+
 //login page
 router.get('/', async (req, res) => {
     try{
-        res.render('admin/index')
+      res.render('admin/index')
     }catch(err){
       console.log(err)
       res.redirect('/')
@@ -70,47 +72,52 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
 //dasshboard
 router.get('/dashboard', checkAuthentication, async (req, res) => {
   try {
+    const galleryPhotos = await GalleryPhotoSchema.find();
+    const galleries = await Gallery.find();
     const photoBasePath = Photo.photoBasePath;
     const photos = await Photo.find();
-    res.render('admin/dashboard', { photos, photoBasePath });
+    res.render('admin/dashboard', { photos, photoBasePath, galleries, galleryPhotos, galleryId: req.query.galleryId });
   } catch (err) {
     console.error(err);
     res.render('admin/index');
   }
 });
 // upload photo(index page works fine)
-router.post('/dashboard/upload', adminUpload.single('image'), async (req, res) => {
+router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.redirect('/admin/dashboard?error=No file selected');
+    if (!req.files || req.files.length === 0) {
+      return res.redirect('/admin/dashboard?error=No files selected');
     }
-    const photo = new Photo({
-      filename: req.file.filename, // Save the file name in the database
-      name: req.body.photoName,
-    });
-
-    await photo.save();
+    const photos = [];
+    for (const file of req.files) {
+      const photo = new Photo({
+        name: file.originalname,
+        filename: file.filename, // Save the file name in the database
+      });
+      photos.push(photo);
+      await photo.save();
+    }
+    
     res.setHeader('Refresh', '0; URL=/admin/dashboard');
     res.redirect('/admin/dashboard');
-    console.log(photo);
+    console.log(photos);
   } catch (error) {
     console.error(error);
     return res.redirect('/admin/dashboard');
   }
 });
-//delete action
+
+//delete action(works fine)
 router.delete('/dashboard/delete', async (req, res) => {
 
   const { photoIds } = req.body;
   console.log(photoIds)
   try {
     // Find the photos in the database
-    const photos = await Photo.find({ _id: { $in: photoIds } }).sort(Date);
-
+    const photos = await Photo.find({ _id: { $in: photoIds } }).sort({ date: -1 });
     if (photos.length === 0) {
       return res.status(404).json({ error: 'Photos not found' });
     }
@@ -124,30 +131,60 @@ router.delete('/dashboard/delete', async (req, res) => {
     // Remove the photos from the database
     await Photo.deleteMany({ _id: { $in: photoIds } });
     res.render('admin/dashboard', { photos, photoIds, photoBasePath: Photo.photoBasePath });
-    res.status(200).json({ message: 'Photos deleted successfully' });
+    console.log('photos successfully deleted')
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    console.log(err,'Cannot delete photos right now.')
   }
 });
-//update order of images (need to be completed)
+//connect photos to gallery (works fine)
 router.put('/dashboard/update', async (req, res) => {
   try {
     const photoIds = req.body.photoIds;
-    const order = req.body.order; 
-    console.log(photoIds, order)
+    const galleryId = req.body.galleryId; 
+    const galleries = await Gallery.find(); // Retrieve all galleries
+    
     // Update the gallery and order for the selected photos
-    await Photo.updateMany({ _id: { $in: photoIds } }, { $set: { order: order, gallery: 'galleryIndexPage' } });
+    await Photo.updateMany({ _id: { $in: photoIds } }, { $set: { gallery: galleryId } });
 
     // Retrieve the updated photos
     const photos = await Photo.find({ _id: { $in: photoIds } });
 
-    res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath });
+    const galleryPhotos = await Promise.all(
+      photos.map((photoId, index) => {
+        const galleryPhoto = new GalleryPhotoSchema({
+          photo: photoId,
+          gallery: galleryId,
+          orderInGallery: index + 1,
+        });
+        console.log(galleryPhoto)
+        return galleryPhoto.save();
+      })
+    );
+    
+    // Add newly created GalleryPhotoSchema docs to the gallery
+    const gallery = await Gallery.findById(galleryId);
+    gallery.photos.push(...galleryPhotos.map((photo) => photo._id));
+    await gallery.save();
+    
+    res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleries});
   } catch (error) {
     // Handle the error
     console.error(error);
   }
 });
+
+//reorder gallery form
+router.put('/dashboard/orderUpdate', async (req, res) => {
+  try {
+    
+  } catch (error) {
+    console.log(error)
+    res.redirect('/admin/dashboard')
+  }
+})
+
+
 
 
 //end of dashboard routes
@@ -209,4 +246,4 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-module.exports = router
+module.exports= router

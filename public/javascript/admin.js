@@ -27,8 +27,11 @@ uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   try {
     const formData = new FormData();
-    formData.append('image', document.getElementById('image-input').files[0]);
-    formData.append('photoName', document.getElementById('name-input').value);
+    const fileInput = document.getElementById('image-input');
+    for (const file of fileInput.files) {
+      formData.append('image', file);
+    }
+    
     // Add other form fields if needed
 
     const response = await fetch('/admin/dashboard/upload', {
@@ -146,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-//update to gallery(works fine)
+// Update to gallery
 const updateForm = document.getElementById('updateForm');
 console.log('Update Event listener attached');
 
@@ -154,26 +157,35 @@ console.log('Update Event listener attached');
 updateForm.addEventListener('submit', async function(event) {
   event.preventDefault(); // Prevent the default form submission
 
-  // Get the selected checkboxes
-  const checkboxes = document.querySelectorAll('.checkboxUpdateForm:checked');
-  const photoIds = Array.from(checkboxes).map(checkbox => checkbox.value);
-  console.log(photoIds)
-  // Create an AJAX request
-  const response = await fetch('/admin/dashboard/update', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ photoIds })
-  });
+// Get the selected checkboxes
+const checkboxes = document.querySelectorAll('.checkboxUpdateForm:checked');
+const photoIds = Array.from(checkboxes).map(checkbox => checkbox.value);
+console.log(photoIds);
 
-  console.log(response);
+// Convert photoIds to an array of strings
+const photoIdsArray = photoIds.map(String);
 
-  if (response.ok) {
-    window.location.reload();
-    console.log('Photos gallery updated successfully');
-  } else {
+// Get the selected gallery ID
+const selectedGallery = document.getElementById('gallerySelect');
+const galleryId = selectedGallery.value;
+console.log(galleryId);
+console.log(selectedGallery)
+// Create an AJAX request
+const response = await fetch('/admin/dashboard/update', {
+  method: 'PUT',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ photoIds: photoIdsArray, galleryId })
+});
+console.log(response);
+
+if (response.ok) {
+  window.location.reload();
+  console.log('Photos gallery updated successfully');
+  }else {
     console.log('Something went wrong');
   }
 });
+
 
 //gallery update form (works fine)
 const updateFormGallery = () => {
@@ -243,7 +255,7 @@ Sortable.create(orderGalleryContainer, {
       headers: {
         'Conten-Type': 'application/json',
       },
-      body: JSON.stringify({ order: updatedOrder}),
+      body: JSON.stringify({ }),
     })
     .then((response) => response.json())
     .then((data) => {

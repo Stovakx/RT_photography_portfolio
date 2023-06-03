@@ -24,13 +24,11 @@ app.use(session({
   saveUninitialized: false
 }))
 
-
-//routes
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   next();
 });
-
+//routes
 const indexRouter = require('./routes/index')
 const animalPhotosRouter = require('./routes/animalphotos')
 const pairPhotosRouter = require('./routes/pairphotos')

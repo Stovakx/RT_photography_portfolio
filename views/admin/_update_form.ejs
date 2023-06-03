@@ -1,7 +1,15 @@
+<div class="row mt-2">
+  <input type="hidden" name="_method" value="PUT">
+  <select name="galleryId" class="form-select form-select-sm m-3">
+    <% galleries.forEach((gallery) => { %>
+      <option value="<%= gallery._id.toString() %>" id="gallerySelect"><%= gallery.name %></option>
+    <% }); %>
+  </select>
+</div>
 <div class="galleryUpdateForm">
   <% if (photos && photos.length > 0) { %>
     <% photos.forEach((photo, index) => { %>
-      <% if (photo.gallery !== 'galleryIndexPage') { %>
+        <!-- if(galleryphotos.gallery.toString() != gallery._id ){ -->
         <div class="galleryDiv">
           <div class="input-group">
             <input name="photoIds" value="<%= photo._id.toString() %>" type="checkbox" id="checkboxUpdate<%= index %>" class="checkboxUpdateForm"/>
@@ -10,11 +18,7 @@
             </label>
           </div>
         </div>
-      <% } %>
+        <!-- } -->
     <% }); %>
-  <% }%>
+  <% } %>
 </div>
-
-
-
-
