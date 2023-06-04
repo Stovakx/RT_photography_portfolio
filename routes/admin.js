@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Admin = require('../models/admin')
 const Photo = require('../models/photos')
-const GalleryPhotoSchema = require('../models/galleryPhotoSchema')
+const GalleryPhoto = require('../models/GalleryPhotoSchema')
 const Gallery = require('../models/gallery') 
 const multer = require('multer')
 const path = require('path')
@@ -59,7 +59,6 @@ router.post('/login', async (req, res) => {
 
     // If password is incorrect, redirect to login with error message
     if (!passwordMatch) {
-      const errorMessage = ''
       return res.redirect('/admin?error=Invalid username or password');
     }
 
@@ -75,14 +74,15 @@ router.post('/login', async (req, res) => {
 //dasshboard
 router.get('/dashboard', checkAuthentication, async (req, res) => {
   try {
-    const galleryPhotos = await GalleryPhotoSchema.find();
-    const galleries = await Gallery.find();
+    const galleryPhotos = await GalleryPhoto.find();
+    const galleries = await Gallery.find().populate('photos.photo').sort({ order: 1 });
     const photoBasePath = Photo.photoBasePath;
     const photos = await Photo.find();
-    res.render('admin/dashboard', { photos, photoBasePath, galleries, galleryPhotos, galleryId: req.query.galleryId });
+    res.render('admin/dashboard', { photos, photoBasePath, galleries, galleryPhotos});
   } catch (err) {
     console.error(err);
-    res.render('admin/index');
+    res.redirect('/admin?error=Failed to load dashboard');
+
   }
 });
 // upload photo(index page works fine)
@@ -101,9 +101,7 @@ router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res
       await photo.save();
     }
     
-    res.setHeader('Refresh', '0; URL=/admin/dashboard');
     res.redirect('/admin/dashboard');
-    console.log(photos);
   } catch (error) {
     console.error(error);
     return res.redirect('/admin/dashboard');
@@ -114,7 +112,6 @@ router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res
 router.delete('/dashboard/delete', async (req, res) => {
 
   const { photoIds } = req.body;
-  console.log(photoIds)
   try {
     // Find the photos in the database
     const photos = await Photo.find({ _id: { $in: photoIds } }).sort({ date: -1 });
@@ -142,7 +139,8 @@ router.put('/dashboard/update', async (req, res) => {
   try {
     const photoIds = req.body.photoIds;
     const galleryId = req.body.galleryId; 
-    const galleries = await Gallery.find(); // Retrieve all galleries
+    const galleryPhoto = await GalleryPhoto.find();
+    const galleries = await Gallery.find();
     
     // Update the gallery and order for the selected photos
     await Photo.updateMany({ _id: { $in: photoIds } }, { $set: { gallery: galleryId } });
@@ -151,23 +149,26 @@ router.put('/dashboard/update', async (req, res) => {
     const photos = await Photo.find({ _id: { $in: photoIds } });
 
     const galleryPhotos = await Promise.all(
-      photos.map((photoId, index) => {
-        const galleryPhoto = new GalleryPhotoSchema({
+      photos.map(async (photoId, index) => {
+        const galleryPhoto = new GalleryPhoto({
           photo: photoId,
           gallery: galleryId,
           orderInGallery: index + 1,
         });
-        console.log(galleryPhoto)
-        return galleryPhoto.save();
+        console.log(galleryPhoto);
+        await galleryPhoto.save();
+        return galleryPhoto;
       })
     );
+    console.log(galleryPhotos);
     
     // Add newly created GalleryPhotoSchema docs to the gallery
     const gallery = await Gallery.findById(galleryId);
     gallery.photos.push(...galleryPhotos.map((photo) => photo._id));
+    console.log(gallery)
     await gallery.save();
-    
-    res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleries});
+
+    res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleries, galleryPhoto});
   } catch (error) {
     // Handle the error
     console.error(error);
@@ -175,70 +176,19 @@ router.put('/dashboard/update', async (req, res) => {
 });
 
 //reorder gallery form
-router.put('/dashboard/orderUpdate', async (req, res) => {
+/* router.put('/dashboard/orderUpdate', async (req, res) => {
   try {
-    
+    const photos = await Photo.find();
+    const galleryPhoto = await GalleryPhoto.find();
+    const galleries = await Gallery.findById(galleryId).populate('photos').exec()
+    res.render('admin/dashboard', { photos, galleryPhoto, galleries: galleries });
   } catch (error) {
-    console.log(error)
-    res.redirect('/admin/dashboard')
-  }
-})
-
-
-
-
-//end of dashboard routes
-
-
-//animal photos
-router.get('/animalphotos',checkAuthentication, async(req, res) => {
-  try {
-    //change to animalphotos model
-    const photoBasePath = Photo.photoBasePath;
-    const photos = await Photo.find()
-    res.render('admin/animalphotos', {photos, photoBasePath})
-  } catch (error) {
-    console.error(error);
-    res.render('admin/index', { error: 'Admin panel je zrovna nefunkční.'});
+    console.log(error);
+    res.redirect('/admin/dashboard');
   }
 });
+ */
 
-//end of animal routes
-
-
-//pair photos
-router.get('/pairphotos',checkAuthentication, async(req, res) => {
-  try {
-    //change to pairphotos model
-    const photoBasePath = Photo.photoBasePath;
-    const photos = await Photo.find()
-    res.render('admin/pairphotos', {photos, photoBasePath})
-  } catch (error) {
-    console.error(error);
-    res.render('admin/index', { error: 'Admin panel je zrovna nefunkční.'});
-  }
-});
-
-//end of pair routes
-
-
-//otherphotos
-router.get('/other',checkAuthentication, async(req, res) => {
-  try {
-    //change to other model
-    const photoBasePath = Photo.photoBasePath;
-    const photos = await Photo.find()
-    res.render('admin/other', {photos, photoBasePath})
-  } catch (error) {
-    console.error(error);
-    res.render('admin/index', { error: 'Admin panel je zrovna nefunkční.'});
-  }
-});
-
-//end of other routes
-
-
-// updating "order" of photos, "order" is for order of photos on website
 
 //logout, redirect to homepage?
 router.get('/logout', (req, res) => {

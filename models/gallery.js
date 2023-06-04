@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 
-const galleriesSchema = new mongoose.Schema({
+const gallerySchema = new mongoose.Schema({
   name: {
     type: String,
   },
   photos: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'GalleryPhotoSchema', 
+      ref: 'Photo', 
     },
   ],
 });
 
-const Galleries = mongoose.model('Gallery', galleriesSchema);
-module.exports = Galleries;
+const Gallery = mongoose.model('Gallery', gallerySchema);
+module.exports = Gallery;

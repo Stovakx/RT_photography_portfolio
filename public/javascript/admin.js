@@ -149,9 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// Update to gallery
+// Update to gallery(works fine)
 const updateForm = document.getElementById('updateForm');
-console.log('Update Event listener attached');
 
 // Attach an event listener to the form submission
 updateForm.addEventListener('submit', async function(event) {
@@ -160,32 +159,28 @@ updateForm.addEventListener('submit', async function(event) {
 // Get the selected checkboxes
 const checkboxes = document.querySelectorAll('.checkboxUpdateForm:checked');
 const photoIds = Array.from(checkboxes).map(checkbox => checkbox.value);
-console.log(photoIds);
 
 // Convert photoIds to an array of strings
 const photoIdsArray = photoIds.map(String);
 
 // Get the selected gallery ID
-const selectedGallery = document.getElementById('gallerySelect');
+const selectedGallery = document.querySelector('select[name="galleryId"]');
 const galleryId = selectedGallery.value;
-console.log(galleryId);
-console.log(selectedGallery)
+
 // Create an AJAX request
 const response = await fetch('/admin/dashboard/update', {
   method: 'PUT',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ photoIds: photoIdsArray, galleryId })
+  body: JSON.stringify({ photoIds: photoIdsArray, galleryId }),
 });
-console.log(response);
 
 if (response.ok) {
-  window.location.reload();
+  
   console.log('Photos gallery updated successfully');
   }else {
     console.log('Something went wrong');
   }
 });
-
 
 //gallery update form (works fine)
 const updateFormGallery = () => {
@@ -231,17 +226,55 @@ document.addEventListener('DOMContentLoaded', ()=> {
 })
 
 //update order of specific gallery (masonry layout or something like that?)
-const updateOrderInGalleryForm = document.getElementById('orderGalleryUpdateForm')
-console.log('Order gallery update listener attached')
+/* const updateOrderInGalleryForm = document.getElementById('orderGalleryUpdateForm');
+const gallerySelect = document.getElementById('gallerySelect');
+const orderGalleryContainer = document.getElementById('photoSortableContainer');
 
-//attach listener
-updateOrderInGalleryForm.addEventListener('submit', async (event) =>{
+// Attach event listener to the gallery select element
+gallerySelect.addEventListener('change', () => {
+  updateGalleryPhotos();
+});
+
+async function updateGalleryPhotos() {
+  const galleryId = gallerySelect.value;
+
+  // Fetch the photos for the selected gallery from the server
+  const response = await fetch(`/admin/dashboard/updategalleryorder`);
+  const data = await response.json();
+
+  // Clear the existing photos from the container
+  orderGalleryContainer.innerHTML = '';
+
+  // Loop through the retrieved photos and create HTML elements
+  data.forEach(photo => {
+    const galleryDiv = document.createElement('div');
+    galleryDiv.classList.add('galleryDiv');
+    const inputGroup = document.createElement('div');
+    inputGroup.classList.add('input-group');
+    const img = document.createElement('img');
+    img.src = `/${photoBasePath}/${photo.filename}`;
+    img.alt = photo.name;
+    img.classList.add('imgUpdateForm');
+
+    inputGroup.appendChild(img);
+    galleryDiv.appendChild(inputGroup);
+    orderGalleryContainer.appendChild(galleryDiv);
+  });
+
+  // Make the container visible if there are photos
+  orderGalleryContainer.style.display = data.length > 0 ? 'block' : 'none';
+}
+
+updateOrderInGalleryForm.addEventListener('submit', async (event) => {
   event.preventDefault();
+});
+updateGalleryPhotos();
+ */
+//rewrite galleries for update and delete to one gallery function and just use in specific gallery
 
-})
 //sortable js 
-const orderGalleryContainer = document.getElementById('photoSortableContainer')
-Sortable.create(orderGalleryContainer, {
+
+/* Sortable.create(orderGalleryContainer, {
   onEnd: function(evt){
     //Get updated photo order after dragging
     const updatedOrder = Array.from(orderGalleryContainer.querySelectorAll('.galleryDiv')).map((div)=>
@@ -265,5 +298,4 @@ Sortable.create(orderGalleryContainer, {
       console.log(error)
     })
   }
-})
-//rewrite galleries for update and delete to one gallery function and just use in specific gallery
+}) */

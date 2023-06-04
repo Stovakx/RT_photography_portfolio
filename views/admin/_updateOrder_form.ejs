@@ -7,20 +7,19 @@
   </select>
 </div>
 <!-- doesn't work as should right now -->
-<% if (photos && photos.length > 0) { %>
-  <div id="photoSortableContainer" <% if (photos.length === 0) { %>style="display: none;"<% } %>>
-    <% photos.forEach((photo, index) => { %>
-      <% const matchingGalleryPhoto = galleryPhotos.find(galleryPhoto => galleryPhoto.photo.toString() === photo._id.toString() && galleryPhoto.gallery.toString() === galleryId); %>
-      <% if (matchingGalleryPhoto) { %>
-        <div class="galleryDiv">
-          <div class="input-group">
-            <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
-          </div>
+<div id="photoSortableContainer" <% if (galleries.length === 0) { %>style="display: none;"<% } %>>
+  <% galleries.forEach((gallery) => { %>
+    <% gallery.photos.forEach((galleryPhoto) => { %>
+      <% console.log(gallery); %>
+      <% photos.forEach((photo)=>{ %>
+      <div class="galleryDiv">
+        <div class="input-group">
+          <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photos.name %>" class="imgUpdateForm" />
         </div>
-      <% } %>
+      </div>
+      <% }) %>
     <% }); %>
-  </div>
-<% } %>
-
-  <input type="hidden" name="_method" value="PUT">
+  <% }); %>
+</div>
+<input type="hidden" name="_method" value="PUT">
   

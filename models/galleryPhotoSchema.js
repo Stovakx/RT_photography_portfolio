@@ -11,8 +11,9 @@ const galleryPhotoSchema = new mongoose.Schema({
   },
   orderInGallery: {
     type: Number,
-  }
+    required: true,
+  },
 });
 
-const GalleryPhotoSchema = mongoose.model('GalleryPhotoSchema', galleryPhotoSchema);
-module.exports = GalleryPhotoSchema;
+const GalleryPhoto = mongoose.model('GalleryPhoto', galleryPhotoSchema);
+module.exports = GalleryPhoto;
