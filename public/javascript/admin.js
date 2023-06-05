@@ -149,13 +149,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// Update to gallery(works fine)
+// Update to gallery()
 const updateForm = document.getElementById('updateForm');
 
 // Attach an event listener to the form submission
 updateForm.addEventListener('submit', async function(event) {
   event.preventDefault(); // Prevent the default form submission
-
 // Get the selected checkboxes
 const checkboxes = document.querySelectorAll('.checkboxUpdateForm:checked');
 const photoIds = Array.from(checkboxes).map(checkbox => checkbox.value);
@@ -166,20 +165,21 @@ const photoIdsArray = photoIds.map(String);
 // Get the selected gallery ID
 const selectedGallery = document.querySelector('select[name="galleryId"]');
 const galleryId = selectedGallery.value;
-
+console.log(selectedGallery)
+console.log(galleryId)
 // Create an AJAX request
 const response = await fetch('/admin/dashboard/update', {
   method: 'PUT',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ photoIds: photoIdsArray, galleryId }),
 });
-
+console.log(response)
 if (response.ok) {
   
   console.log('Photos gallery updated successfully');
   }else {
     console.log('Something went wrong');
-  }
+  }  
 });
 
 //gallery update form (works fine)

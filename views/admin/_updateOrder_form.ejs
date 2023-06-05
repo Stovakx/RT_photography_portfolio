@@ -10,7 +10,6 @@
 <div id="photoSortableContainer" <% if (galleries.length === 0) { %>style="display: none;"<% } %>>
   <% galleries.forEach((gallery) => { %>
     <% gallery.photos.forEach((galleryPhoto) => { %>
-      <% console.log(gallery); %>
       <% photos.forEach((photo)=>{ %>
       <div class="galleryDiv">
         <div class="input-group">
@@ -22,4 +21,3 @@
   <% }); %>
 </div>
 <input type="hidden" name="_method" value="PUT">
-  

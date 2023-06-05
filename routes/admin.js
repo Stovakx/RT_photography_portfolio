@@ -2,8 +2,8 @@ const express = require('express')
 const router = express.Router()
 const Admin = require('../models/admin')
 const Photo = require('../models/photos')
-const GalleryPhoto = require('../models/GalleryPhotoSchema')
-const Gallery = require('../models/gallery') 
+const Gallery = require('../models/gallery')
+const GalleryPhoto = require('../models/GalleryPhotoSchema');
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
@@ -22,12 +22,12 @@ router.use((req, res, next) => {
 })
 // Define a middleware function to check if the user is authenticated
 const checkAuthentication = (req, res, next) => {
-  // Check if the user is logged in
+  console.log('checkAuthentication middleware');
   if (req.session.isAuthenticated) {
     // If the user is authenticated, allow them to proceed
     next();
   } else {
-    // If the user is not authenticated, redirect them to the login page
+    console.log('Redirecting to login page')
     res.redirect('/admin');
   }
 };
@@ -72,19 +72,21 @@ router.post('/login', async (req, res) => {
 });
 
 //dasshboard
+//dashboard
 router.get('/dashboard', checkAuthentication, async (req, res) => {
   try {
+    console.log('Inside /dashboard route handler'); // Add this line for logging
     const galleryPhotos = await GalleryPhoto.find();
-    const galleries = await Gallery.find().populate('photos.photo').sort({ order: 1 });
+    const galleries = await Gallery.find();
     const photoBasePath = Photo.photoBasePath;
     const photos = await Photo.find();
-    res.render('admin/dashboard', { photos, photoBasePath, galleries, galleryPhotos});
+    res.render('admin/dashboard', { photos, photoBasePath, galleries, galleryPhotos });
   } catch (err) {
     console.error(err);
     res.redirect('/admin?error=Failed to load dashboard');
-
   }
 });
+
 // upload photo(index page works fine)
 router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res) => {
   try {
@@ -100,8 +102,7 @@ router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res
       photos.push(photo);
       await photo.save();
     }
-    
-    res.redirect('/admin/dashboard');
+    res.redirect('/admin/dashboard', {photos});
   } catch (error) {
     console.error(error);
     return res.redirect('/admin/dashboard');
@@ -110,7 +111,6 @@ router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res
 
 //delete action(works fine)
 router.delete('/dashboard/delete', async (req, res) => {
-
   const { photoIds } = req.body;
   try {
     // Find the photos in the database
@@ -127,53 +127,55 @@ router.delete('/dashboard/delete', async (req, res) => {
 
     // Remove the photos from the database
     await Photo.deleteMany({ _id: { $in: photoIds } });
+
+    console.log('Photos successfully deleted');
     res.render('admin/dashboard', { photos, photoIds, photoBasePath: Photo.photoBasePath });
-    console.log('photos successfully deleted')
   } catch (err) {
     console.error(err);
-    console.log(err,'Cannot delete photos right now.')
+    console.log('Cannot delete photos right now.');
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-//connect photos to gallery (works fine)
+
+//link photos to gallery(it works but thros error "_update_form.ejs")
 router.put('/dashboard/update', async (req, res) => {
   try {
     const photoIds = req.body.photoIds;
-    const galleryId = req.body.galleryId; 
-    const galleryPhoto = await GalleryPhoto.find();
-    const galleries = await Gallery.find();
-    
+    const galleryId = req.body.galleryId;
+    console.log(photoIds);
+    console.log(galleryId);
     // Update the gallery and order for the selected photos
+    const galleries = await Gallery.find();
     await Photo.updateMany({ _id: { $in: photoIds } }, { $set: { gallery: galleryId } });
 
     // Retrieve the updated photos
     const photos = await Photo.find({ _id: { $in: photoIds } });
 
     const galleryPhotos = await Promise.all(
-      photos.map(async (photoId, index) => {
+      photos.map((photoId, index) => {
         const galleryPhoto = new GalleryPhoto({
           photo: photoId,
           gallery: galleryId,
           orderInGallery: index + 1,
         });
-        console.log(galleryPhoto);
-        await galleryPhoto.save();
-        return galleryPhoto;
+        return galleryPhoto.save();
       })
     );
     console.log(galleryPhotos);
-    
+
     // Add newly created GalleryPhotoSchema docs to the gallery
     const gallery = await Gallery.findById(galleryId);
     gallery.photos.push(...galleryPhotos.map((photo) => photo._id));
-    console.log(gallery)
     await gallery.save();
 
-    res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleries, galleryPhoto});
+    res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleryPhotos, galleries });
   } catch (error) {
     // Handle the error
     console.error(error);
+    res.status(500).send('Internal Server Error');
   }
 });
+
 
 //reorder gallery form
 /* router.put('/dashboard/orderUpdate', async (req, res) => {
