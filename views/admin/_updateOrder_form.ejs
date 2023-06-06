@@ -1,8 +1,7 @@
 <div class="row mt-2">
-  <input type="hidden" name="_method" value="PUT">
-  <select name="galleryId" class="form-select form-select-sm m-3">
+  <select name="galleryId" class="form-select form-select-sm m-3" id="gallerySelect">
     <% galleries.forEach((gallery) => { %>
-      <option value="<%= gallery._id.toString() %>" id="gallerySelect"><%= gallery.name %></option>
+      <option value="<%= gallery._id.toString() %>" id="galleryOption"><%= gallery.name %></option>
     <% }); %>
   </select>
 </div>
@@ -19,5 +18,6 @@
       <% }) %>
     <% }); %>
   <% }); %>
+
 </div>
 <input type="hidden" name="_method" value="PUT">

@@ -142,12 +142,8 @@ router.put('/dashboard/update', async (req, res) => {
   try {
     const photoIds = req.body.photoIds;
     const galleryId = req.body.galleryId;
-    console.log(photoIds);
-    console.log(galleryId);
     // Update the gallery and order for the selected photos
     const galleries = await Gallery.find();
-    await Photo.updateMany({ _id: { $in: photoIds } }, { $set: { gallery: galleryId } });
-
     // Retrieve the updated photos
     const photos = await Photo.find({ _id: { $in: photoIds } });
 
@@ -158,16 +154,17 @@ router.put('/dashboard/update', async (req, res) => {
           gallery: galleryId,
           orderInGallery: index + 1,
         });
+        console.log(galleryPhoto, 'Cesta k fotce byla uložena')
         return galleryPhoto.save();
       })
     );
-    console.log(galleryPhotos);
 
     // Add newly created GalleryPhotoSchema docs to the gallery
+    const photoIdsToUpdate = galleryPhotos.map((galleryPhoto) => galleryPhoto.photo);
     const gallery = await Gallery.findById(galleryId);
-    gallery.photos.push(...galleryPhotos.map((photo) => photo._id));
+    gallery.photos = photoIdsToUpdate;
     await gallery.save();
-
+    console.log(gallery, 'Gallerie byla uložená')
     res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleryPhotos, galleries });
   } catch (error) {
     // Handle the error
@@ -178,18 +175,27 @@ router.put('/dashboard/update', async (req, res) => {
 
 
 //reorder gallery form
-/* router.put('/dashboard/orderUpdate', async (req, res) => {
+router.put('/dashboard/orderUpdate', async (req, res) => {
   try {
-    const photos = await Photo.find();
-    const galleryPhoto = await GalleryPhoto.find();
-    const galleries = await Gallery.findById(galleryId).populate('photos').exec()
-    res.render('admin/dashboard', { photos, galleryPhoto, galleries: galleries });
+    const updatedOrder = req.body.updatedOrder; // Array of photoIds in the updated order
+
+    // Find the galleryPhoto document based on the galleryId
+    const galleryId = req.body.galleryId;
+    const galleryPhoto = await GalleryPhoto.findOne({ gallery: galleryId });
+
+    // Update the order of photos in the galleryPhoto document
+    galleryPhoto.photos = updatedOrder;
+
+    // Save the updated galleryPhoto
+    await galleryPhoto.save();
+
+    res.status(200).json({ message: 'Gallery order updated successfully' });
   } catch (error) {
     console.log(error);
-    res.redirect('/admin/dashboard');
+    res.status(500).json({ error: 'Failed to update gallery order' });
   }
 });
- */
+
 
 
 //logout, redirect to homepage?

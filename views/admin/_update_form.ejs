@@ -2,7 +2,7 @@
   <input type="hidden" name="_method" value="PUT">
   <select  class="form-select form-select-sm m-3" name="galleryId">
     <% galleries.forEach((gallery) => { %>
-      <option value="<%= gallery._id.toString() %>"  id="gallerySelect"><%= gallery.name %></option>
+      <option value="<%= gallery._id.toString() %>"><%= gallery.name %></option>
     <% }); %>
   </select>
 </div>

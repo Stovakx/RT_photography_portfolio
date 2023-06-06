@@ -45,10 +45,8 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(70px, 180px));
-    grid-template-rows: repeat(auto, 100px);
-    gap: 1rem;
-
-    
+    grid-template-rows: repeat(auto);
+    gap: 0.75rem;    
 }
 /* delete form div, update form div */
 .galleryDiv, .image-container{
@@ -59,6 +57,7 @@
 }
 .imgDeleteForm, .imgUpdateForm{
     height: 100px;
+    max-width: 180px;
 }
 .input-group{
     max-width: max-content;
@@ -96,13 +95,13 @@
 }
 
 #photoSortableContainer > .galleryDiv {
-    height: 100%;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 #photoSortableContainer > .galleryDiv > .input-group> .imgUpdateForm{
-    height: 100%;
-    max-width: 100%;
+    height: 100px;
+    max-width: 180px;
     object-fit: contain;
 }
