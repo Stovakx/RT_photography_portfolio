@@ -137,7 +137,7 @@ router.delete('/dashboard/delete', async (req, res) => {
   }
 });
 
-//link photos to gallery(it works but thros error "_update_form.ejs")
+//connect photos to galelry(works fine)
 router.put('/dashboard/update', async (req, res) => {
   try {
     const photoIds = req.body.photoIds;
@@ -165,7 +165,8 @@ router.put('/dashboard/update', async (req, res) => {
     gallery.photos = photoIdsToUpdate;
     await gallery.save();
     console.log(gallery, 'Gallerie byla uložená')
-    res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleryPhotos, galleries });
+    
+    return res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleryPhotos, galleries });
   } catch (error) {
     // Handle the error
     console.error(error);
@@ -173,34 +174,9 @@ router.put('/dashboard/update', async (req, res) => {
   }
 });
 
-
-//reorder gallery form
-router.put('/dashboard/orderUpdate', async (req, res) => {
-  try {
-    const updatedOrder = req.body.updatedOrder; // Array of photoIds in the updated order
-
-    // Find the galleryPhoto document based on the galleryId
-    const galleryId = req.body.galleryId;
-    const galleryPhoto = await GalleryPhoto.findOne({ gallery: galleryId });
-
-    // Update the order of photos in the galleryPhoto document
-    galleryPhoto.photos = updatedOrder;
-
-    // Save the updated galleryPhoto
-    await galleryPhoto.save();
-
-    res.status(200).json({ message: 'Gallery order updated successfully' });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: 'Failed to update gallery order' });
-  }
-});
-
-
-
 //logout, redirect to homepage?
 router.get('/logout', (req, res) => {
-  req.session.destroy();
+  req.session.destroy();0
   res.redirect('/');
 });
 

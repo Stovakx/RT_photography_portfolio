@@ -52,20 +52,83 @@
             </div>
         </div>
     </div>
-    <div class="container my-2 d-flex justify-content-center">
+</section>
+<section class="showgallery mt-5">
+    <div class="container container-showgallery ">
+        <nav class="navbar navbar-light bg-light justify-content-center">
+            <ul class="nav ">
+              <li class="nav-item">
+                <a class="nav-link" href="#galleryPrewiev" data-slide="0">Home page</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#galleryPrewiev" data-slide="1">párové fotky</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#galleryPrewiev" data-slide="2">fotky zvířat</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#galleryPrewiev" data-slide="3">Ostatní</a>
+              </li>
+            </ul>
+        </nav>
         <div class="row">
             <div class="col">
-                <div class="orderUpdate_form mb-2">
-                    <form action="/admin/dashboard/updategalleryorder" method="post" id="orderGalleryUpdateForm">
-                        <%- include('./_updateOrder_form.ejs') %>
-                        <div class="row mt-2">
-                            <div class="col d-flex justify-content-end">
-                                <button class="btn btn-danger me-2" type="reset">Cancel</button>
-                                <button class="btn btn-success me-2" type="submit">Save</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <div id="galleryPrewiev" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner" data-slide="0">
+                      <div class="carousel-item d-flex">
+                        <% if (photos && photos.length > 0) { %>
+                            <% photos.forEach((photo, index) => { %>
+                                <div class="galleryDiv">
+                                  <div class="input-group">
+                                    <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
+                                  </div>
+                                </div>
+                            <% }); %>
+                          <% } %>
+                      </div>
+                      <div class="carousel-item d-flex"  data-slide="1">
+                        <% if (photos && photos.length > 0) { %>
+                            <% photos.forEach((photo, index) => { %>
+                                <div class="galleryDiv">
+                                  <div class="input-group">
+                                    <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
+                                  </div>
+                                </div>
+                            <% }); %>
+                          <% } %>
+                      </div>
+                      <div class="carousel-item d-flex"  data-slide="2">
+                        <% if (photos && photos.length > 0) { %>
+                            <% photos.forEach((photo, index) => { %>
+                                <div class="galleryDiv">
+                                  <div class="input-group">
+                                    <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
+                                  </div>
+                                </div>
+                            <% }); %>
+                          <% } %>
+                      </div>
+                      <div class="carousel-item d-flex"  data-slide="3">
+                        <% if (photos && photos.length > 0) { %>
+                            <% photos.forEach((photo, index) => { %>
+                                <div class="galleryDiv">
+                                  <div class="input-group">
+                                    <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
+                                  </div>
+                                </div>
+                            <% }); %>
+                          <% } %>
+                      </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
             </div>
         </div>
     </div>
