@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+/* document.addEventListener('DOMContentLoaded', () => {
     const images = document.querySelectorAll('.gallery_item');
 
     for (let i = 0; i < images.length; i++) {
@@ -10,13 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             image.classList.add('verticalImg');
         }
-    }
-
+    } 
+});*/
     const gallery = document.querySelector('.gallery');
     const masonry = new Masonry(gallery, {
         itemSelector: '.gallery_col',
-        columnWidth: '.gallery_col',
-        percentPosition: true,
-        fitWidth: true,
+        gutter:10,
     });
-});
+
