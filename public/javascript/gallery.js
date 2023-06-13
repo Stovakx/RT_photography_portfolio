@@ -1,11 +1,22 @@
-const Masonry = require('masonry-layout')
+document.addEventListener('DOMContentLoaded', () => {
+    const images = document.querySelectorAll('.gallery_item');
 
-window.onload = () => {
-    const grid = document.querySelector('.grid');
-    const masonry = new Masonry(grid, {
-        itemSelector: '.grid-item',
-        gutter: 10,
-        originTop:true,
-        originLeft:true,
+    for (let i = 0; i < images.length; i++) {
+        var image = images[i];
+
+        // Checking image width/height
+        if (image.naturalHeight < image.naturalWidth) {
+            image.classList.add('horizontalImg');
+        } else {
+            image.classList.add('verticalImg');
+        }
+    }
+
+    const gallery = document.querySelector('.gallery');
+    const masonry = new Masonry(gallery, {
+        itemSelector: '.gallery_col',
+        columnWidth: '.gallery_col',
+        percentPosition: true,
+        fitWidth: true,
     });
-}
+});

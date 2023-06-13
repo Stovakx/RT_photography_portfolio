@@ -14,10 +14,10 @@
         </div>
     </div>
   </section>
-  <section class="section_gallery  my-5">
-    <div class="container grid">
-      <div class="grid-item">
-        <a href=""><img src="" alt=""></a>
+  <section class="section_gallery my-5">
+    <% if (gallery && gallery.photos && gallery.photos.length > 0) { %>
+      <div class="container gallery">
+          <%- include('../partials/gallery.ejs') %>
       </div>
-    </div>
+    <% } %>
   </section>

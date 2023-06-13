@@ -37,99 +37,59 @@
     <div class="container mt-5 d-flex justify-content-center">
         <div class="row">
             <div class="col">
-                <div class="update_form mb-2">
-                    <form action="/admin/dashboard/update" method="post" id="updateForm">
-                        <%- include('./_update_form.ejs') %>
-                        <div class="row mt-2">
-                            <input type="hidden" name="_method" value="PUT">
-                            <div class="col d-flex justify-content-end">
-                                <button class="btn btn-danger me-2" type="reset">Cancel</button>
-                                <button class="btn btn-success me-2" type="submit">Save</button>
-                            </div>
+              <div class="update_form mb-2">
+                <form action="/admin/dashboard/update" method="post" id="updateForm">
+                    <%- include('./_update_form.ejs') %>
+                    <div class="row mt-2">
+                        <div class="col d-flex justify-content-end">
+                            <button class="btn btn-danger me-2" type="reset">Cancel</button>
+                            <button class="btn btn-success me-2" type="submit">Save</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
+              </div>
             </div>
         </div>
     </div>
 </section>
-<section class="showgallery mt-5">
-    <div class="container container-showgallery ">
-        <nav class="navbar navbar-light bg-light justify-content-center">
-            <ul class="nav ">
-              <li class="nav-item">
-                <a class="nav-link" href="#galleryPrewiev" data-slide="0">Home page</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#galleryPrewiev" data-slide="1">párové fotky</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#galleryPrewiev" data-slide="2">fotky zvířat</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#galleryPrewiev" data-slide="3">Ostatní</a>
-              </li>
-            </ul>
-        </nav>
-        <div class="row">
-            <div class="col">
-                <div id="galleryPrewiev" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner" data-slide="0">
-                      <div class="carousel-item d-flex">
-                        <% if (photos && photos.length > 0) { %>
-                            <% photos.forEach((photo, index) => { %>
-                                <div class="galleryDiv">
-                                  <div class="input-group">
-                                    <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
-                                  </div>
-                                </div>
-                            <% }); %>
-                          <% } %>
-                      </div>
-                      <div class="carousel-item d-flex"  data-slide="1">
-                        <% if (photos && photos.length > 0) { %>
-                            <% photos.forEach((photo, index) => { %>
-                                <div class="galleryDiv">
-                                  <div class="input-group">
-                                    <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
-                                  </div>
-                                </div>
-                            <% }); %>
-                          <% } %>
-                      </div>
-                      <div class="carousel-item d-flex"  data-slide="2">
-                        <% if (photos && photos.length > 0) { %>
-                            <% photos.forEach((photo, index) => { %>
-                                <div class="galleryDiv">
-                                  <div class="input-group">
-                                    <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
-                                  </div>
-                                </div>
-                            <% }); %>
-                          <% } %>
-                      </div>
-                      <div class="carousel-item d-flex"  data-slide="3">
-                        <% if (photos && photos.length > 0) { %>
-                            <% photos.forEach((photo, index) => { %>
-                                <div class="galleryDiv">
-                                  <div class="input-group">
-                                    <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
-                                  </div>
-                                </div>
-                            <% }); %>
-                          <% } %>
-                      </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Next</span>
-                    </a>
+<!-- gallery slideshow preview.. todo:stylization masonry -->
+<section class="showgallery my-5">
+  <div class="container container-showgallery">
+    <nav class="navbar navbar-light  justify-content-center">
+      <ul class="nav">
+        <% galleries.forEach((gallery, galleryIndex) => { %>
+          <li class="nav-item">
+            <a class="nav-link" href="#galleryPreview" data-bs-slide-to="<%= galleryIndex %>"><%= gallery.name %></a>
+          </li>
+        <% }); %>
+      </ul>
+    </nav>
+    <div class="row">
+      <div class="col">
+        <div id="galleryPreview" class="carousel slide" data-bs-ride="false">
+          <div class="carousel-inner">
+            <% galleries.forEach((gallery, galleryIndex) => { %>
+              <div class="carousel-item <%= (galleryIndex === 0) ? 'active' : '' %>">
+                <div class="galleryDiv">
+                  <div class="input-group">
+                    <% gallery.photos.forEach((photo) => { %>
+                      <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
+                    <% }); %>
                   </div>
-            </div>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+          <a class="carousel-control-prev" href="#galleryPreview" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#galleryPreview" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </a>
         </div>
+      </div>
     </div>
+  </div>
 </section>

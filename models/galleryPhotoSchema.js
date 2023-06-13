@@ -15,5 +15,7 @@ const galleryPhotoSchema = new mongoose.Schema({
   },
 });
 
+/* galleryPhotoSchema.index({ gallery: 1, photo: 1 }, { unique: true }); */
+
 const GalleryPhoto = mongoose.model('GalleryPhoto', galleryPhotoSchema);
 module.exports = GalleryPhoto;

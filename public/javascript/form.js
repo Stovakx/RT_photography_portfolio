@@ -9,7 +9,7 @@ form.addEventListener("submit", (e) => {
 
   const formData = new FormData(form);
 
-  fetch("/send", {
+  fetch("/kontakt/send", {
     method: "POST",
     body: formData,
   })

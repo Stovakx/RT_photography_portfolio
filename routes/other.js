@@ -1,22 +1,25 @@
 const express = require('express')
-const app = express()
 const router = express.Router()
-/* const Other = require('../models/other') */
+const Photo = require('../models/photos')
+const GalleryPhoto = require('../models/galleryPhotoSchema')
+const Gallery = require('../models/gallery')
 
 router.use((req, res, next) => {
     req.app.set('layout', 'layouts/layout')
     next()
 })
 
-router.get('/', async (req,res) =>{
-    /* let other  */
-    try {
-        /* other = await Other.find().sort({uploadDate:'desc'}).exec() */
-        res.render('other/index', /* {other: other} */)
-    } catch  {
-        res.redirect('index')
-        //allert message
-    }
+router.get('/', async (req, res) => {
+  try{
+    const currentURL = 'gallery'
+    const galleryPhotos = await GalleryPhoto.find();
+    const gallery = await Gallery.findOne({name: 'ostatní'}).populate('photos');
+    const photoBasePath = Photo.photoBasePath;
+    const photos = await Photo.find();
+    res.render('other/index', {currentURL, photos, photoBasePath, gallery, galleryPhotos})
+  }catch(err){
+    console.log(err)
+  }
 })
 
 module.exports = router

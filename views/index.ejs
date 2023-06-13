@@ -1,7 +1,7 @@
 <section class="photo_section_name my-5">
     <div class="container container-fluid container-md">
-        <div class="row col col-12">
-            <h2 class="text-center mb-4">Vítejte na mých webových stránkách. </h2>
+        <div class="row col col-12 pt-4">
+            <h1 class="text-center mb-4 uvod">Vítejte na mých webových stránkách. </h1>
             <p>
               Mé jméno je Tomáš a jsem vášnivým fotografem. 
               Ať už chcete vyfotit portrétní fotografie, párové nebo třeba svého mazlíčka, neváhejte mě kontaktovat. 
@@ -15,21 +15,19 @@
 </section>
 <!-- forEach(photoIndex)?? -->
 <section class="section_gallery my-5">
-    <div class="container gallery grid_wrapper">
-        <div class=" gallery_col ">
-          <a href="" data-lightbox="mygallery">
-            <img src="" alt="" class="gallery_item">
-          </a>
-        </div>
+  <% if (gallery && gallery.photos && gallery.photos.length > 0) { %>
+    <div class="container gallery ">
+        <%- include('./partials/gallery.ejs') %>
     </div>
+  <% } %>
 </section>
 <section class="section_aboutme">
-    <div class="container mx-auto my-4 bg-info">
+    <div class="container mx-auto my-4 containerAboutMe bg-light">
         <div class="row ">
-            <div class="col col-12 col-md-6 about_me_col">
-                <div class="row py-2">
-                  <div class="col">
-                    <h1>O mně</h1>
+            <div class="col col-12 col-lg-6 about_me_col">
+                <div class="row ">
+                  <div class="col mt-4 mb-3">
+                    <h2>O mně</h2>
                   </div>
                 </div>
                 <div class="row">
@@ -47,24 +45,9 @@
                   </div>
                 </div>
             </div>
-            <div class="col col-12 col-md-6 text-center my-auto pe-md-0 hero_img_col">
+            <div class="col col-12 col-lg-6 p-0 hero_img_col">
                 <img src="https://images.pexels.com/photos/2150/sky-space-dark-galaxy.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt=""  class="hero_image_aboutMe"  >
             </div>
         </div>
-    </div>
-</section>
-<section class="form my-4">
-    <div class="container border border-2 border-dark rounded-4 bg-light mx-auto">
-        <div class="row">
-            <div class="col col-12 mt-3">
-                <h3 class="text-center">Kontaktní formulář</h3>
-                <p>Chcete párové fotky, rodinné s dětmi, či prostě jen památku na svého mazlíčka? 
-                  Nebo něco úplně jiného? Neváhejte mne kontaktovat skrze formulář níže. Spojím se s Vámi a domluvíme všechny podrobnosti.
-                </p>
-            </div>
-        </div>
-        <form class="row g-3 needs-validation " method="post" enctype="multipart/form-data" action="/send" id="contactForm">
-          <%- include('./partials/_contact_form.ejs') %>
-        </form>
     </div>
 </section>

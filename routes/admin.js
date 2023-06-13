@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose')
 const Admin = require('../models/admin')
 const Photo = require('../models/photos')
 const Gallery = require('../models/gallery')
-const GalleryPhoto = require('../models/GalleryPhotoSchema');
+const GalleryPhoto = require('../models/galleryPhotoSchema');
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
@@ -77,7 +78,7 @@ router.get('/dashboard', checkAuthentication, async (req, res) => {
   try {
     console.log('Inside /dashboard route handler'); // Add this line for logging
     const galleryPhotos = await GalleryPhoto.find();
-    const galleries = await Gallery.find();
+    const galleries = await Gallery.find().populate('photos');
     const photoBasePath = Photo.photoBasePath;
     const photos = await Photo.find();
     res.render('admin/dashboard', { photos, photoBasePath, galleries, galleryPhotos });
@@ -102,7 +103,7 @@ router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res
       photos.push(photo);
       await photo.save();
     }
-    res.redirect('/admin/dashboard', {photos});
+    res.redirect('/admin/dashboard')
   } catch (error) {
     console.error(error);
     return res.redirect('/admin/dashboard');
@@ -129,7 +130,7 @@ router.delete('/dashboard/delete', async (req, res) => {
     await Photo.deleteMany({ _id: { $in: photoIds } });
 
     console.log('Photos successfully deleted');
-    res.render('admin/dashboard', { photos, photoIds, photoBasePath: Photo.photoBasePath });
+    res.redirect('/admin/dashboard')
   } catch (err) {
     console.error(err);
     console.log('Cannot delete photos right now.');
@@ -160,11 +161,13 @@ router.put('/dashboard/update', async (req, res) => {
     );
 
     // Add newly created GalleryPhotoSchema docs to the gallery
-    const photoIdsToUpdate = galleryPhotos.map((galleryPhoto) => galleryPhoto.photo);
+    // Add newly created photo IDs to the existing array
     const gallery = await Gallery.findById(galleryId);
-    gallery.photos = photoIdsToUpdate;
+    const photoIdsToUpdate = galleryPhotos.map((galleryPhoto) => new mongoose.Types.ObjectId(galleryPhoto.photo));
+    gallery.photos.push(...photoIdsToUpdate); 
+ 
     await gallery.save();
-    console.log(gallery, 'Gallerie byla uložená')
+    console.log(gallery, 'Přidáno do galerie')
     
     return res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleryPhotos, galleries });
   } catch (error) {

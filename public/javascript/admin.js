@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Update to gallery+gallery(works)
 const UpdateToGallery= ()=>{
     // Get the selected gallery ID
+  const updateForm = document.getElementById('updateForm')
   const galleryIdSelect = document.querySelector('select[name="galleryId"]');
   galleryIdSelect.addEventListener('change', () => {
     const selectedGalleryId = galleryIdSelect.value;  
@@ -155,7 +156,7 @@ const UpdateToGallery= ()=>{
   const response = await fetch('/admin/dashboard/update', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ photoIds, galleryId }),
+    body: JSON.stringify({ galleryId: galleryIdSelect.value, photoIds }),
   });
 
   if (response.ok) {

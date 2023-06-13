@@ -1,7 +1,8 @@
 const express = require('express')
-const app = express()
 const router = express.Router()
-/* const AnimalPhotos = require('../models/animalPhotos') */
+const Photo = require('../models/photos')
+const GalleryPhoto = require('../models/galleryPhotoSchema')
+const Gallery = require('../models/gallery')
 
 
 router.use((req, res, next) => {
@@ -9,15 +10,18 @@ router.use((req, res, next) => {
     next()
 })
 
-router.get('/', async (req,res) =>{
-    /* let animalPhotos  */
-    try {
-        /* animalPhotos = await AnimalPhotos.find().sort({uploadDate:'desc'}).exec() */
-        res.render('animalphotos/index', /* {animalPhotos: animalPhotos} */)
-    } catch  {
-        res.redirect('index')
-        //allert message
-    }
+router.get('/', async (req, res) => {
+  try{
+    const currentURL = 'gallery'
+    const galleryPhotos = await GalleryPhoto.find();
+    const gallery = await Gallery.findOne({name: 'fotky zvířat'}).populate('photos');
+    const photoBasePath = Photo.photoBasePath;
+    const photos = await Photo.find();
+    res.render('animalphotos/index', {currentURL, photos, photoBasePath, gallery, galleryPhotos})
+  }catch(err){
+    console.log(err)
+  }
 })
+  
 
 module.exports = router

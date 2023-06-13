@@ -9,7 +9,8 @@ router.use((req, res, next) => {
 
 router.get('/', async(req, res) => {
     try{
-        res.render('pricing/index')
+        const currentURL = req.url
+        res.render('pricing/index', {currentURL})
     }catch{
         res.redirect('index')
         //allert message

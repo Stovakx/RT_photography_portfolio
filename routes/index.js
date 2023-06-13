@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Photo = require('../models/photos')
-//sending email modules
-const nodemailer = require('nodemailer')
-const multiparty = require('multiparty')
+const GalleryPhoto = require('../models/galleryPhotoSchema')
+const Gallery = require('../models/gallery')
+
 
 
 router.use((req, res, next) => {
@@ -12,63 +12,16 @@ router.use((req, res, next) => {
 })
 
 router.get('/', async (req, res) => {
-  //gallery photos from model
-    try{
-      const photoBasePath = Photo.photoBasePath
-      const photos = await Photo.find()
-      res.render('index', {photos, photoBasePath})
-    }catch{}
-  })
-
-  //rework to async (try catch)
-router.post('/send', (req, res) => {
-  //transporter, email from which you will receive email
-  const transporter = nodemailer.createTransport({
-    host: process.env.SENDER_HOST,
-    port: 587,
-    auth: {
-        user: process.env.SENDER_EMAIL,
-        pass: process.env.SENDER_PW
-    }
-  });
-  // verify connection configuration
-  transporter.verify(function (error, success) {
-    if (error) {
-      console.log(error)
-    } else {
-      console.log("Server is ready to take our messages")
-    }
-  });
-    //taking data from form page with index.js
-    let form = new multiparty.Form()
-    let data = {}
-    form.parse(req, function (err, fields) {
-      console.log(fields);
-      Object.keys(fields).forEach(function (property) {
-        data[property] = fields[property].toString()
-      })
-
-      //How emails is looking změnit na klientův email env
-      const mail = {
-        from: data.email,
-        to: process.env.EMAIL_RECEIVER,
-        subject: 'objednání focení',
-        text: `${data.firstName} ${data.lastName}
-              \n ${data.telephone} 
-              \n ${data.message}`,
-      };
-      console.log(mail)
-      //messages if email was sent or no
-      transporter.sendMail(mail, (err, data) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: "Něco se pokazilo, zkuste to prosím znova." })
-        } else {
-          res.status(200).json({ message: "Email byl odeslán." })
-          
-        }
-        
-      })
-    })
+  try{
+    const currentURL = 'gallery'
+    const galleryPhotos = await GalleryPhoto.find();
+    const gallery = await Gallery.findOne({name: 'Home page'}).populate('photos');
+    const photoBasePath = Photo.photoBasePath;
+    const photos = await Photo.find();
+    res.render('index', {currentURL, photos, photoBasePath, gallery, galleryPhotos})
+  }catch(err){
+    console.log(err)
+  }
 })
+
   module.exports = router
