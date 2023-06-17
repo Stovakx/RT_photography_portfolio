@@ -4,7 +4,7 @@
 }
 html,body{
     height: 100%;
-    background-color: #ffefd5;
+    background-color: #f5f3f0;
     position: relative;
     margin: 0;
 }
@@ -21,6 +21,11 @@ h1, h2, h3, h4, h5{
 }
 h1{
     font-family: Georgia, 'Times New Roman', Times, serif;
+}
+#headerNavbar{
+    background: #fcfafa;
+    box-shadow: 41px 41px 82px #d0d0d0,
+    -41px -41px 82px #f0f0f0;
 }
 .footer {
     flex-shrink: 0;
@@ -50,7 +55,7 @@ li{
 }
 .contactFormContainer{
     border-radius: 10px;
-    box-shadow: rgba(255, 239, 213, 1) 0px -50px 36px -28px inset;
+    box-shadow: rgba(245, 243, 240, 1) 0px -50px 36px -28px inset;
 }
 
 .btn_form_submit{
@@ -76,7 +81,7 @@ li{
 
 .btn_form_submit:hover {
   box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
-  transform: scale(1.05) rotate(-1deg);
+  transform: scale(1.05) rotate(-3deg);
 }
 @media only screen and (max-width:575px) {
     .gallery_item{
@@ -104,33 +109,38 @@ li{
 
 @media only screen and (min-width: 992px){
     /* zoom in!!! + masonryjs css */
-    .gallery {
-        display:grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
     
     .gallery_col {
-        width: auto;
-        height: 22rem;
         overflow: hidden;
         padding: 0 0 0 0;
         margin-bottom: 10px;
     }
+
     .gallery_item{
         width: 100%;
-        height: 200px;
+        height: 12.5rem;
         object-fit:cover;
         overflow: hidden;
     }
+
     .gallery_col>a> .gallery_item{
         /* display: block; */
         transition: 0.75s;
                
     }
+
     .gallery_col:hover .gallery_item{
-        overflow: hidden;
         transform: scale(1.3);
     }
+/*     .squareImg{
+        width: 12.5rem;
+    }
+    .horizontalImg{
+        width: 30%;
+    }
+    .verticalImg{
+        width: 20%;
+    } */
     .containerAboutMe{
         max-height: 40rem;
         border-radius: 12px;
@@ -138,14 +148,14 @@ li{
         box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, 
         rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
     }
+
     .about_me_col{
         opacity: 0.71;
     }
+
     .hero_img_col > .hero_image_aboutMe{
         width: auto;
         height: 100%;
-        
-        
     }
     
 }

@@ -13,7 +13,7 @@
           <div class="input-group">
             <input name="photoIds" value="<%= photo._id.toString() %>" type="checkbox" id="checkboxUpdate<%= index %>" class="checkboxUpdateForm"/>
             <label for="checkboxUpdate<%= index %>">
-              <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
+              <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" loading="lazy" />
             </label>
           </div>
         </div>

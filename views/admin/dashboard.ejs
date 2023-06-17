@@ -70,13 +70,11 @@
           <div class="carousel-inner">
             <% galleries.forEach((gallery, galleryIndex) => { %>
               <div class="carousel-item <%= (galleryIndex === 0) ? 'active' : '' %>">
-                <div class="galleryDiv">
-                  <div class="input-group">
-                    <% gallery.photos.forEach((photo) => { %>
-                      <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgUpdateForm" />
-                    <% }); %>
+                <% if (gallery && gallery.photos && gallery.photos.length > 0) { %>
+                  <div class="gallery">
+                      <%- include('../partials/gallery.ejs',{gallery, photos}) %>
                   </div>
-                </div>
+                <% } %>
               </div>
             <% }); %>
           </div>

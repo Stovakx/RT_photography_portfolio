@@ -5,7 +5,7 @@
         <div class="input-group">
           <input name="photoIds" value="<%= photo._id.toString() %>" type="checkbox" id="checkbox<%= index %>" class="checkboxDeleteForm" />
           <label for="checkbox<%= index %>">
-            <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgDeleteForm" />
+            <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="imgDeleteForm" loading="lazy" />
           </label>
         </div>
       </div>
