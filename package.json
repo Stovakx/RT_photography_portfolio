@@ -24,6 +24,7 @@
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.0",
+    "lightbox2": "^2.11.4",
     "masonry": "^0.0.2",
     "masonry-layout": "^4.2.2",
     "method": "^2.0.0",
