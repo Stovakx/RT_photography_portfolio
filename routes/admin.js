@@ -5,6 +5,7 @@ const Admin = require('../models/admin')
 const Photo = require('../models/photos')
 const Gallery = require('../models/gallery')
 const GalleryPhoto = require('../models/galleryPhotoSchema');
+const sharp = require('sharp')
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
@@ -72,7 +73,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-//dasshboard
 //dashboard
 router.get('/dashboard', checkAuthentication, async (req, res) => {
   try {
@@ -81,6 +81,8 @@ router.get('/dashboard', checkAuthentication, async (req, res) => {
     const galleries = await Gallery.find().populate('photos');
     const photoBasePath = Photo.photoBasePath;
     const photos = await Photo.find();
+
+    
     res.render('admin/dashboard', { photos, photoBasePath, galleries, galleryPhotos });
   } catch (err) {
     console.error(err);
@@ -98,7 +100,7 @@ router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res
     for (const file of req.files) {
       const photo = new Photo({
         name: file.originalname,
-        filename: file.filename, // Save the file name in the database
+        filename: file.filename,
       });
       photos.push(photo);
       await photo.save();

@@ -1,22 +1,27 @@
 <section class="photo_section_name my-5">
-    <div class="container container-fluid container-md">
-        <div class="row col col-12 pt-4">
+    <div class="container">
+        <div class="row pt-4">
+          <div class="col col-12 ">
             <h1 class="text-center mb-4 uvod">Vítejte na mých webových stránkách. </h1>
-            <p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-12">
+            <p class="text-center">
               Mé jméno je Tomáš a jsem vášnivým fotografem. 
               Ať už chcete vyfotit portrétní fotografie, párové nebo třeba svého mazlíčka, neváhejte mě kontaktovat. 
               Na jakékoliv dotazy Vám velmi rád odpovím. 
               Budu se na Vás těšit a doufám, že i vy budete mít zážitek a krásné fotky.
               Děkuji všem za zájem.
             </p>
+          </div>
         </div>
-        <div class="row col col-12"></div>
     </div>
 </section>
 <!-- forEach(photoIndex)?? -->
 <section class="section_gallery my-5">
   <% if (gallery && gallery.photos && gallery.photos.length > 0) { %>
-    <div class="container gallery">
+    <div class="container gallery mx-auto ">
         <%- include('./partials/gallery.ejs') %>
     </div>
   <% } %>
