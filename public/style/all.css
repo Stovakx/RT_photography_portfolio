@@ -135,15 +135,14 @@ li{
 
 @media only screen and (min-width: 992px){
       .gallery_col {
-        height: 10rem;
-        max-height: 12.5rem;
         width: 18%;
-        min-width:min-content;
-        max-width: 19%;
         display: inline-block;
         overflow: hidden;
       }
-      
+      .gallery_col img{
+        width: 100%;
+        height: auto;
+      }
       .gallery_item {
         height: 100%;
         width: auto;

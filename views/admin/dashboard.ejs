@@ -52,42 +52,4 @@
         </div>
     </div>
 </section>
-<!-- gallery slideshow preview.. todo:stylization masonry -->
-<section class="showgallery my-5">
-  <div class="container container-showgallery">
-    <nav class="navbar navbar-light  justify-content-center">
-      <ul class="nav">
-        <% galleries.forEach((gallery, galleryIndex) => { %>
-          <li class="nav-item">
-            <a class="nav-link" href="#galleryPreview" data-bs-slide-to="<%= galleryIndex %>"><%= gallery.name %></a>
-          </li>
-        <% }); %>
-      </ul>
-    </nav>
-    <div class="row">
-      <div class="col">
-        <div id="galleryPreview" class="carousel slide" data-bs-ride="false">
-          <div class="carousel-inner">
-            <% galleries.forEach((gallery, galleryIndex) => { %>
-              <div class="carousel-item <%= (galleryIndex === 0) ? 'active' : '' %>">
-                <% if (gallery && gallery.photos && gallery.photos.length > 0) { %>
-                  <div class="gallery">
-                      <%- include('../partials/gallery.ejs',{gallery, photos}) %>
-                  </div>
-                <% } %>
-              </div>
-            <% }); %>
-          </div>
-          <a class="carousel-control-prev" href="#galleryPreview" role="button" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#galleryPreview" role="button" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+

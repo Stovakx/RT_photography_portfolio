@@ -76,7 +76,6 @@ router.post('/login', async (req, res) => {
 //dashboard
 router.get('/dashboard', checkAuthentication, async (req, res) => {
   try {
-    console.log('Inside /dashboard route handler'); // Add this line for logging
     const galleryPhotos = await GalleryPhoto.find();
     const galleries = await Gallery.find().populate('photos');
     const photoBasePath = Photo.photoBasePath;
@@ -112,7 +111,7 @@ router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res
   }
 });
 
-//delete action(works fine)
+//delete action(works fine) todo:delete id from gallery and delete galleryPhoto for deleted img
 router.delete('/dashboard/delete', async (req, res) => {
   const { photoIds } = req.body;
   try {
@@ -121,16 +120,20 @@ router.delete('/dashboard/delete', async (req, res) => {
     if (photos.length === 0) {
       return res.status(404).json({ error: 'Photos not found' });
     }
-
     // Delete the files from the file system
     photos.forEach(photo => {
       const filePath = path.join(uploadPath, photo.filename);
       fs.unlinkSync(filePath);
     });
-
     // Remove the photos from the database
     await Photo.deleteMany({ _id: { $in: photoIds } });
-
+    //remove id of photos from gallery
+    await Gallery.updateMany(
+      {photos:{$in: photoIds} },
+      {$pull: {photos:{$in:photoIds}} }
+    );
+    //delete galleryPhoto for photo
+    await GalleryPhoto.deleteMany({photo: {$in:photoIds} });
     console.log('Photos successfully deleted');
     res.redirect('/admin/dashboard')
   } catch (err) {
@@ -155,7 +158,6 @@ router.put('/dashboard/update', async (req, res) => {
         const galleryPhoto = new GalleryPhoto({
           photo: photoId,
           gallery: galleryId,
-          orderInGallery: index + 1,
         });
         console.log(galleryPhoto, 'Cesta k fotce byla uložena')
         return galleryPhoto.save();
@@ -178,6 +180,77 @@ router.put('/dashboard/update', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+//galleries page
+router.get('/galleries', checkAuthentication, async (req, res)=>{
+  try {
+    const galleryPhotos = await GalleryPhoto.find();
+    const galleries = await Gallery.find().populate('photos');
+    const photoBasePath = Photo.photoBasePath;
+    const photos = await Photo.find();
+
+    
+    res.render('admin/gallery', { photos, photoBasePath, galleries, galleryPhotos });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/admin?error=Failed to load dashboard');
+  }
+})
+
+//create gallery
+router.post('galleries/create', async (req,res)=>{
+  try {
+    const gallery = new Gallery({
+      name: req.body.name
+    });
+    await gallery.save();
+    console.log(gallery);
+
+    res.redirect('/admin/galleries');
+  } catch (err) {
+    console.log('Něco se pokazilo');
+    console.log(err);
+  }
+})
+
+//adding photos to galleries
+router.put('galleries/addtogallery', async(req, res)=>{
+  try {
+    const photoIds = req.body.photoIds;
+    const galleryId = req.body.galleryId;
+    // Update the gallery and order for the selected photos
+    const galleries = await Gallery.find();
+    // Retrieve the updated photos
+    const photos = await Photo.find({ _id: { $in: photoIds } });
+
+    const galleryPhotos = await Promise.all(
+      photos.map((photoId, index) => {
+        const galleryPhoto = new GalleryPhoto({
+          photo: photoId,
+          gallery: galleryId,
+        });
+        console.log(galleryPhoto, 'Cesta k fotce byla uložena')
+        return galleryPhoto.save();
+      })
+    );
+
+    // Add newly created GalleryPhotoSchema docs to the gallery
+    // Add newly created photo IDs to the existing array
+    const gallery = await Gallery.findById(galleryId);
+    const photoIdsToUpdate = galleryPhotos.map((galleryPhoto) => new mongoose.Types.ObjectId(galleryPhoto.photo));
+    gallery.photos.push(...photoIdsToUpdate); 
+ 
+    await gallery.save();
+    console.log(gallery, 'Přidáno do galerie')
+    
+    return res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleryPhotos, galleries });
+  } catch (error) {
+    // Handle the error
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+})
+
 
 //logout, redirect to homepage?
 router.get('/logout', (req, res) => {

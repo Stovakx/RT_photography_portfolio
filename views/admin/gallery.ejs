@@ -1,0 +1,62 @@
+<header>
+    <%- include('./admin_header.ejs') %>
+</header>
+<section class="createGallery mt-5">
+    <div class="container contCreateGallery">
+        <div class="row">
+            <div class="col-md-6 d-flex justify-content-center"> 
+                <div class="d-flex flex-column upload_form">
+                    <form method="POST" action="/admin/galleries/create" id="uploadForm" enctype="multipart/form-data">
+                        <%- include('./_galleryCreate_form.ejs') %> 
+                        <div class="row mt-auto">
+                            <div class="col d-flex justify-content-end align-items-end">
+                                <div class="align-self-end">
+                                    <button class="btn btn-danger me-2" type="button" id="cancelButton">Cancel</button>
+                                    <button class="btn btn-success" type="submit" >Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>   
+            </div>
+        </div>
+    </div>
+</section>
+<section class="showgallery my-5">
+    <div class="container container-showgallery">
+      <nav class="navbar navbar-light  justify-content-center">
+        <ul class="nav">
+          <% galleries.forEach((gallery, galleryIndex) => { %>
+            <li class="nav-item">
+              <a class="nav-link" href="#galleryPreview" data-bs-slide-to="<%= galleryIndex %>"><%= gallery.name %></a>
+            </li>
+          <% }); %>
+        </ul>
+      </nav>
+      <div class="row">
+        <div class="col">
+          <div id="galleryPreview" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-inner">
+              <% galleries.forEach((gallery, galleryIndex) => { %>
+                <div class="carousel-item <%= (galleryIndex === 0) ? 'active' : '' %>">
+                  <% if (gallery && gallery.photos && gallery.photos.length > 0) { %>
+                    <div class="container gallery mx-auto ">
+                        <%- include('../partials/gallery.ejs',{gallery,photos}) %>
+                    </div>
+                  <% } %>
+                </div>
+              <% }); %>
+            </div>
+            <a class="carousel-control-prev" href="#galleryPreview" role="button" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#galleryPreview" role="button" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
