@@ -1,3 +1,38 @@
+//login form
+const loginForm = document.getElementById('loginForm');
+
+// Add an event listener for form submission
+loginForm.addEventListener('submit', async (event) => {
+  event.preventDefault(); // Prevent the default form submission
+
+  // Get the username and password values
+  const user = document.getElementById('adminInput').value;
+  const password = document.getElementById('passwordInput').value;
+
+  try {
+    // Send a POST request to the login route
+    const response = await fetch('/admin/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ user, password })
+    });
+
+    if (response.ok) {
+      // Redirect to the dashboard if login is successful
+      window.location.href = '/admin/dashboard';
+    } else {
+      // Handle error response (e.g., display an error message)
+      console.log('Login failed');
+    }
+  } catch (error) {
+    console.log('An error occurred:', error);
+  }
+});
+
+
+
 //image preview when clicked on reset button, img preview doesn't clear src
 const uploadInput = document.getElementById('image-input');
 const previewImage = document.getElementById('preview-image');

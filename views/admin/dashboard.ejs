@@ -22,7 +22,7 @@
             <div class="col-md-6 d-flex justify-content-center">
                 <div class="delete_form mt-4 mt-md-0 d-flex">
                     <form action="/admin/dashboard/delete?_method=DELETE" method="delete" id="deleteForm">
-                            <%- include('./_delete_form.ejs') %>
+                        <%- include('./_delete_form.ejs', { photos: photos }) %>
                         <div class="row mt-3">
                             <div class="col-12 btn_col d-flex justify-content-end">
                                 <button type="reset" class="btn btn-danger me-2">Cancel</button>

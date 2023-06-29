@@ -11,11 +11,17 @@ const session = require('express-session');
 const crypto = require('crypto');
 //mongoose+db
 const mongoose = require('mongoose');
-mongoose.connect(process.env.DATABASE_URL, 
-  { useNewUrlParser: true }) 
-  const db = mongoose.connection
-db.on('error', error => console.log(error));
-db.once('open', () => console.log('Connected to database'));
+const connectToDatabase = async() =>{
+  try {
+    await mongoose.connect(process.env.DATABASE_URL, 
+      { useNewUrlParser: true,
+      });
+    /* console.log('Connected to database') ; */
+  } catch (err) {
+    console.log(err)
+  }
+}; connectToDatabase();
+
 app.use(bodyParser.urlencoded({ extended: true }));
 const sessionSecret = crypto.randomBytes(32).toString('hex');
 app.use(session({
@@ -35,7 +41,8 @@ const pairPhotosRouter = require('./routes/pairphotos');
 const pricingRouter = require('./routes/pricing');
 const otherRouter = require('./routes/other');
 const adminRouter = require('./routes/admin');
-const contactRouter = require('./routes/contact')
+const contactRouter = require('./routes/contact');
+const { Server } = require('http');
 //port
 const port = process.env.PORT || 3000;
 
@@ -56,6 +63,8 @@ app.use('/admin', adminRouter)
 app.use('/kontakt', contactRouter)
 
 // Express server listening...
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+
+const server = app.listen(port, () => {
+  return console.log(`Listening on port ${port}`);
 });
+module.exports = server;

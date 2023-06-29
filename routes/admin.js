@@ -111,7 +111,7 @@ router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res
   }
 });
 
-//delete action(works fine) todo:delete id from gallery and delete galleryPhoto for deleted img
+//delete action(tested)
 router.delete('/dashboard/delete', async (req, res) => {
   const { photoIds } = req.body;
   try {
@@ -123,25 +123,27 @@ router.delete('/dashboard/delete', async (req, res) => {
     // Delete the files from the file system
     photos.forEach(photo => {
       const filePath = path.join(uploadPath, photo.filename);
-      fs.unlinkSync(filePath);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     });
     // Remove the photos from the database
     await Photo.deleteMany({ _id: { $in: photoIds } });
-    //remove id of photos from gallery
+    // Remove IDs from the gallery
     await Gallery.updateMany(
-      {photos:{$in: photoIds} },
-      {$pull: {photos:{$in:photoIds}} }
+      { photos: { $in: photoIds } },
+      { $pull: { photos: { $in: photoIds } } }
     );
-    //delete galleryPhoto for photo
-    await GalleryPhoto.deleteMany({photo: {$in:photoIds} });
+    // Delete gallery photos
+    await GalleryPhoto.deleteMany({ photo: { $in: photoIds } });
     console.log('Photos successfully deleted');
-    res.redirect('/admin/dashboard')
+    res.redirect('/admin/dashboard');
   } catch (err) {
-    console.error(err);
+    console.log(err);
     console.log('Cannot delete photos right now.');
-    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 //connect photos to galelry(works fine)
 router.put('/dashboard/update', async (req, res) => {
