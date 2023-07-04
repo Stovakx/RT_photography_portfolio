@@ -6,10 +6,10 @@
     <% }); %>
   </select>
 </div>
-<div class="galleryUpdateForm">
+<div class="galleryUpdateForm gallery">
   <% if (photos && photos.length > 0) { %>
     <% photos.forEach((photo, index) => { %>
-        <div class="galleryDiv">
+        <div class="galleryDiv gallery_col">
           <div class="input-group">
             <input name="photoIds" value="<%= photo._id.toString() %>" type="checkbox" id="checkboxUpdate<%= index %>" class="checkboxUpdateForm"/>
             <label for="checkboxUpdate<%= index %>">

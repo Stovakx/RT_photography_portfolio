@@ -1,6 +1,8 @@
 <section class="photo_section_name my-4">
-    <div class="container">
-        <div class="row my-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 text-start">
+          <div class="row my-3">
             <div class="col">
                 <h1>Páry/Rodiny</h1>
             </div>
@@ -12,12 +14,22 @@
                 </p>
             </div>
         </div>
-    </div>
-  </section>
-  <section class="section_gallery my-5">
-    <% if (gallery && gallery.photos && gallery.photos.length > 0) { %>
-      <div class="container gallery ">
-          <%- include('../partials/gallery.ejs') %>
+        <div class="row">
+          <div class="col">
+            <a href="/kontakt" class="btn btnContact" >Objednat focení</a>
+          </div>
+        </div>
       </div>
-    <% } %>
-  </section>
+      <div class="col-12 col-md-6">
+
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section_gallery my-5">
+  <% if (gallery && gallery.photos && gallery.photos.length > 0) { %>
+    <div class="container gallery ">
+        <%- include('../partials/gallery.ejs') %>
+    </div>
+  <% } %>
+</section>

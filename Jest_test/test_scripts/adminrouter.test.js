@@ -148,7 +148,7 @@ describe('Admin Router', () => {
   });
 
   //update to gallery route
-  describe('PUT /admin/dashboard/update', () => {
+  describe('POST /admin/dashboard/update', () => {
     // Test data
     const samplePhotoIds = [new mongoose.Types.ObjectId(), new mongoose.Types.ObjectId()];
     const sampleGalleryId = new mongoose.Types.ObjectId();

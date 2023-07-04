@@ -189,7 +189,7 @@ const UpdateToGallery= ()=>{
   
   // Create an AJAX request
   const response = await fetch('/admin/dashboard/update', {
-    method: 'PUT',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ galleryId: galleryIdSelect.value, photoIds }),
   });

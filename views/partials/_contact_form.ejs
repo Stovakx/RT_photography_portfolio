@@ -15,26 +15,50 @@
   </div>
   <div class="col-md-3">
     <label for="telephone" class="form-label">Tel.:</label>
-    <input type="tel" class="form-control" id="telephone" name="telephone" required>
+    <input type="text" inputmode="numeric" class="form-control" id="telephone" name="telephone" required>
     <div class="invalid-feedback">
       Prosím zadejte svoje telefonní číslo správně.
     </div>
   </div>
-  <div class="col textareaCol">
+  <div class="col">
     <label for="message" class="form-label">Vaše zpráva</label>
     <textarea class="form-control formTextArea" aria-label="message" id="message" name="message" required></textarea>
   </div>
-  <div class="col-12">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-      <label class="form-check-label" for="invalidCheck">
-        Souhlasím s využití vaších informací.
-      </label>
-      <div class="invalid-feedback">
-        Musíte souhlasit s podmínkami.
+  <div class="row  my-3 me-2">
+    <div class="col-6">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+          <span class="d-flex pt-1">
+            Souhlasím s využití vaších
+            <button type="button" class="gdprBtnForm" data-bs-toggle="modal" data-bs-target="#gdprModal">
+              informací.
+            </button>
+          </span>
+        <div class="invalid-feedback">
+          Musíte souhlasit s podmínkami.
+        </div>
+      </div>
+    </div>
+    <div class="col-6 text-end">
+      <button class="btn btn_form_submit" type="submit" value="submit" id="formBtn">Odeslat</button>
+    </div>
+  </div>
+
+  
+<!-- gdpr Modal -->
+<div class="modal fade" id="gdprModal" tabindex="-1" aria-labelledby="gdprModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="gdprModalLabel">Zpracování osobních údajů</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       GDRP
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zavřít</button>
       </div>
     </div>
   </div>
-  <div class="col-12 text-end mb-4 me-2">
-    <button class="btn btn_form_submit" type="submit" value="submit" id="formBtn">Odeslat</button>
-  </div>
+</div>

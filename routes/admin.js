@@ -9,6 +9,7 @@ const sharp = require('sharp')
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
+const { restart } = require('nodemon')
 const uploadPath = path.join('public' ,Photo.photoBasePath);
 const photoMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
 const adminUpload = multer({
@@ -146,7 +147,7 @@ router.delete('/dashboard/delete', async (req, res) => {
 
 
 //connect photos to galelry(works fine)
-router.put('/dashboard/update', async (req, res) => {
+router.post('/dashboard/update', async (req, res) => {
   try {
     const photoIds = req.body.photoIds;
     const galleryId = req.body.galleryId;
@@ -161,7 +162,7 @@ router.put('/dashboard/update', async (req, res) => {
           photo: photoId,
           gallery: galleryId,
         });
-        console.log(galleryPhoto, 'Cesta k fotce byla uložena')
+        console.log(galleryPhoto)
         return galleryPhoto.save();
       })
     );
@@ -175,7 +176,7 @@ router.put('/dashboard/update', async (req, res) => {
     await gallery.save();
     console.log(gallery, 'Přidáno do galerie')
     
-    return res.render('admin/dashboard', { photos, selectedPhotos: photoIds, photoBasePath: Photo.photoBasePath, gallery, galleryPhotos, galleries });
+    res.redirect('/admin/dashboard')
   } catch (error) {
     // Handle the error
     console.error(error);
@@ -259,5 +260,6 @@ router.get('/logout', (req, res) => {
   req.session.destroy();0
   res.redirect('/');
 });
+
 
 module.exports= router
