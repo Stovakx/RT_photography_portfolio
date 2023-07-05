@@ -165,6 +165,10 @@ opacity: 100%;
     background: #315cfd;
     color: white;
 }
+/* todo modal width... */
+.email, .www{
+    color: red;
+}
 @media only screen and (max-width:575px) {
     .gallery_col{
         display: flex;
