@@ -90,7 +90,7 @@ router.get('/dashboard', checkAuthentication, async (req, res) => {
   }
 });
 
-// upload photo(index page works fine)
+// upload photo(tested)
 router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
@@ -102,6 +102,13 @@ router.post('/dashboard/upload', adminUpload.array('image', 10), async (req, res
         name: file.originalname,
         filename: file.filename,
       });
+
+      // Use sharp to get the width and height of the image
+      const image = sharp(file.path);
+      const metadata = await image.metadata();
+      photo.width = metadata.width;
+      photo.height = metadata.height;
+
       photos.push(photo);
       await photo.save();
     }
@@ -146,7 +153,7 @@ router.delete('/dashboard/delete', async (req, res) => {
 });
 
 
-//connect photos to galelry(works fine)
+//connect photos to galelry(tested and works)
 router.post('/dashboard/update', async (req, res) => {
   try {
     const photoIds = req.body.photoIds;

@@ -13,6 +13,12 @@ const photoSchema = new mongoose.Schema({
   },
   filename: {
     type: String
+  },
+  width: {
+    type: Number
+  },
+  height: {
+    type: Number
   }
 });
 

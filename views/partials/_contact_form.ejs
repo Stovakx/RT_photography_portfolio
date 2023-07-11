@@ -25,12 +25,12 @@
     <textarea class="form-control formTextArea" aria-label="message" id="message" name="message" required></textarea>
   </div>
   <div class="row  my-3 me-2">
-    <div class="col-6">
+    <div class="col-12 col-md-6">
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
           <span class="d-flex pt-1">
             Souhlasím s využití vaších
-            <button type="button" class="gdprBtnForm" data-bs-toggle="modal" data-bs-target="#gdprModal">
+            <button type="button " class="gdprBtnForm" data-bs-toggle="modal" data-bs-target="#gdprModal">
               informací.
             </button>
           </span>
@@ -39,7 +39,7 @@
         </div>
       </div>
     </div>
-    <div class="col-6 text-end">
+    <div class="col-12 col-md-6 text-end mt-2 mt-md-0">
       <button class="btn btn_form_submit" type="submit" value="submit" id="formBtn">Odeslat</button>
     </div>
   </div>
@@ -70,11 +70,10 @@
       .
       </p>
       <p><strong>Spávcem</strong> Vaších osobních údajů bude <strong>Tomáš Rybenský</strong></p>
-      <p>Adresa:</p>
-      <p>IČO:</p>
+      <p>Adresa: Sládkova 860, 539 73 Skuteč</p>
       <p>Telefon:</p>
-      <p>E-mail: <span class="email"> jáchym</span></p>
-      <p><strong>V případě jakýchkoliv dotazů v oblasti ochrany osobních údajů nás přímo kontaktujte na e-mailové adrese:</strong><span class="email"> Jáchym</span></p>
+      <p>E-mail: <span class="email"> foceni.rybensky@gmail.com</span></p>
+      <p><strong>V případě jakýchkoliv dotazů v oblasti ochrany osobních údajů nás přímo kontaktujte na e-mailové adrese:</strong><span class="email"> foceni.rybensky@gmail.com</span></p>
       <p>Příjemcem Vaších osobních údajů bude Tomáš Rybenský.</p>
       <p>Ve vztahu ke zpracování Vaších osobních údajů bychom Vás dále chtěli informovat o Vašich následujících právech:</p>
       <%- include('./gdpracordion.ejs') %>

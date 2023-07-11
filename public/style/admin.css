@@ -55,7 +55,8 @@
     flex-grow: 1;
 }
 .gallery_col{
-    width: 15%;
+    max-width: 23%;
+    margin-bottom: 10px;
 }
 .gallery_col img{
     width: 100%;

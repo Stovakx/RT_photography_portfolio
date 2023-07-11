@@ -1,8 +1,8 @@
 <% gallery.photos.forEach((photo) => { %>
-    <div class="gallery_col ">
-        <a href="/<%= photoBasePath %>/<%= photo.filename %>" data-lightbox="mygallery">
-          <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="gallery_item" id="dynamicImg" loading="lazy">
-        </a>
-    </div>
+  <div class="gallery_col <%= photo.width > photo.height ? 'width2' : 'height2' %>">
+      <a href="/<%= photoBasePath %>/<%= photo.filename %>" data-lightbox="mygallery">
+        <img src="/<%= photoBasePath %>/<%= photo.filename %>" alt="<%= photo.name %>" class="gallery_item" id="dynamicImg" loading="lazy">
+      </a>
+  </div>
 <% }) %>
-
+<div class="grid-sizer"></div>

@@ -147,6 +147,7 @@ opacity: 100%;
     box-shadow: none;
 }
 .gdprBtnForm{
+    height: 1rem;
     border: none;
     background-color: #f8f9fa;
     text-decoration: underline solid 2px black;
@@ -165,9 +166,16 @@ opacity: 100%;
     background: #315cfd;
     color: white;
 }
-/* todo modal width... */
+
 .email, .www{
     color: red;
+}
+.gdprP{
+    font-size: 1rem;
+    font-weight: 400;
+}
+.gdprul{
+    list-style-type:upper-alpha;
 }
 @media only screen and (max-width:575px) {
     .gallery_col{
@@ -204,6 +212,10 @@ opacity: 100%;
         margin-left: 10%;
         margin-right: 10%;
     }
+    .modal-dialog{
+        max-width: 90vw;
+        z-index: 999;
+    }
 }
 @media only screen and (min-width:767px){
     .gallery_col{
@@ -225,7 +237,7 @@ opacity: 100%;
         position: fixed;
         top: 0;
         width: 100%;
-        z-index: 9999;
+        z-index: 998;
     }
     #headerNavbar.hidden {
         display: none;
@@ -245,13 +257,15 @@ opacity: 100%;
         position: relative;
     }
     .gallery_col {
-    width: 18%;
-    display: inline-block;
-    overflow: hidden;
+        max-width: 23%;
+        display: block; 
+        display: inline-block;
+        overflow: hidden;
     }
-    .gallery_col img{
-    width: 100%;
-    height: auto;
+    .gallery_col .gallery_item{
+   
+        width: 100%;
+        height: auto;
     }
     .gallery_item {
     height: 100%;
