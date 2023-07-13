@@ -127,50 +127,8 @@ deleteForm.addEventListener('submit', async function(event) {
     console.log('Something went wrong');
   }
 });
-//gallery delete form
-const deleteFormGallery = () => {
-  const availableImages = [];
-  const galleryDivs = document.querySelectorAll('.galleryDiv');
-  galleryDivs.forEach((galleryDiv) => {
-    const image = galleryDiv.querySelector('.imgDeleteForm');
-    if (image) {
-      const imageUrl = image.getAttribute('src');
-      availableImages.push(imageUrl);
-    }
-  });
-  const imgWidths = [];
-  const numberOfImages = availableImages.length;
-  const maxWidth = 180;
-  const minWidth = 70;
-  for (let i = 0; i < numberOfImages; i++) {
-    const width = Math.floor(Math.random() * (maxWidth - minWidth + 1)) + minWidth;
-    imgWidths.push(width);
-  }
-  const createGallery = () => {
-    const galleryDivs = document.querySelectorAll('.galleryDiv');
-    for (let i = 0; i < galleryDivs.length; i++) {
-      const galleryDiv = galleryDivs[i];
-      const photo = galleryDiv.querySelector('.imgDeleteForm');
-      if (photo) {
-        const imgSrc = photo.getAttribute('src');
-        const imgAlt = photo.getAttribute('alt');
-        const imgWidth = photo.getAttribute('width');
-        const newImage = new Image();
-        newImage.src = imgSrc;
-        newImage.alt = imgAlt;
-        newImage.width = imgWidth;
-        newImage.classList.add('formGalleryImg');
-        galleryDiv.appendChild(newImage);
-      }
-    }
-  };
-  
-  createGallery();
-};
-document.addEventListener('DOMContentLoaded', () => {
-  deleteFormGallery();
-});
-// Update to gallery+gallery(works)
+
+// Update to gallery(works)
 const UpdateToGallery= ()=>{
     // Get the selected gallery ID
   const updateForm = document.getElementById('updateForm')
@@ -185,8 +143,6 @@ const UpdateToGallery= ()=>{
   const checkboxes = document.querySelectorAll('.checkboxUpdateForm:checked');
   const photoIds = Array.from(checkboxes).map(checkbox => checkbox.value);
   
-  
-  
   // Create an AJAX request
   const response = await fetch('/admin/dashboard/update', {
     method: 'POST',
@@ -200,49 +156,4 @@ const UpdateToGallery= ()=>{
     console.log('Something went wrong');
   }
   });
-  //gallery update form (works fine)
-  const updateFormGallery = () => {
-    const availableImages = [];
-    const galleryDivs = document.querySelectorAll('.galleryDiv');
-    galleryDivs.forEach((galleryDiv) => {
-      const image = galleryDiv.querySelector('.imgUpdateForm');
-      if (image) {
-        const imageUrl = image.getAttribute('src');
-        availableImages.push(imageUrl);
-      }
-    });
-    const imgWidths = [];
-    const numberOfImages = availableImages.length;
-    const maxWidth = 180;
-    const minWidth = 70;
-    for (let i = 0; i < numberOfImages; i++) {
-      const width = Math.floor(Math.random() * (maxWidth - minWidth + 1)) + minWidth;
-      imgWidths.push(width);
-    }
-    const createGallery = () => {
-      const galleryDivs = document.querySelectorAll('.galleryDiv');
-      for (let i = 0; i < galleryDivs.length; i++) {
-        const galleryDiv = galleryDivs[i];
-        const photo = galleryDiv.querySelector('.imgDeleteForm');
-        if (photo) {
-          const imgSrc = photo.getAttribute('src');
-          const imgAlt = photo.getAttribute('alt');
-          const imgWidth = photo.getAttribute('width');
-          const newImage = new Image();
-          newImage.src = imgSrc;
-          newImage.alt = imgAlt;
-          newImage.width = imgWidth;
-          newImage.classList.add('formGalleryImg');
-          galleryDiv.appendChild(newImage);
-        }
-      }
-    };
-    createGallery();
-  };
-  document.addEventListener('DOMContentLoaded', ()=> {
-    updateFormGallery()
-  });  
 };UpdateToGallery()
-
-
-//Masonry to do!!! 

@@ -1,7 +1,7 @@
-<div class="galleryDeleteForm">
+<div class="galleryDeleteForm gallery">
   <% if (photos && photos.length > 0) { %>
     <% photos.forEach((photo, index) => { %>
-      <div class="galleryDiv ">
+      <div class="gallery_col">
         <div class="input-group">
           <input name="photoIds" value="<%= photo._id.toString() %>" type="checkbox" id="checkbox<%= index %>" class="checkboxDeleteForm" />
           <label for="checkbox<%= index %>">
@@ -14,4 +14,3 @@
     <p>No photos found.</p>
   <% } %>
 </div>
-

@@ -1,25 +1,54 @@
 <header>
     <%- include('./admin_header.ejs') %>
 </header>
-<section class="createGallery mt-5">
-    <div class="container contCreateGallery">
-        <div class="row">
-            <div class="col-md-6 d-flex justify-content-center"> 
-                <div class="d-flex flex-column upload_form">
-                    <form method="POST" action="/admin/galleries/create" id="uploadForm" enctype="multipart/form-data">
-                        <%- include('./_galleryCreate_form.ejs') %> 
-                        <div class="row mt-auto">
-                            <div class="col d-flex justify-content-end align-items-end">
-                                <div class="align-self-end">
-                                    <button class="btn btn-danger me-2" type="button" id="cancelButton">Cancel</button>
-                                    <button class="btn btn-success" type="submit" >Create</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>   
+<section class="createGallery mt-5 ">
+    <div class="container contCreateGallery mx-auto">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="row">
+            <div class="col">
+              <h3>Tvorba galerie</h3>
             </div>
+          </div>
+          <div class="row ">
+              <div class="col-12 d-flex justify-content-center"> 
+                  <div class="d-flex upload_form">
+                      <form method="POST" action="/admin/galleries/create" id="uploadForm">
+                          <%- include('./_galleryCreate_form.ejs') %> 
+                          <div class="row mt-auto align-items-end btnrow">
+                              <div class="col d-flex justify-content-end align-self-end">
+                                <button class="btn btn-danger me-2" type="button" id="cancelButton">Cancel</button>
+                                <button class="btn btn-success" type="submit" >Create</button>
+                              </div>
+                          </div>
+                      </form>
+                  </div>   
+              </div>
+          </div>
         </div>
+        <div class="col-12 col-md-6">
+          <div class="row">
+            <div class="col-12">
+              <h3>
+                Vymazání galerie
+              </h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+              <div class="d-flex upload_form">
+                <form method="POST" action="/admin/galleries/delete" id="deleteForm" enctype="">
+                    <div class="row mt-auto align-items-end btnrow">
+                        <div class="col d-flex justify-content-end align-self-end">
+                          <button class="btn btn-success" type="submit" ></button>
+                        </div>
+                    </div>
+                </form>
+              </div>   
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </section>
 <section class="showgallery my-5">

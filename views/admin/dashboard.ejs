@@ -20,7 +20,7 @@
                 </div>   
             </div>
             <div class="col-md-6 d-flex justify-content-center">
-                <div class="delete_form mt-4 mt-md-0 d-flex">
+                <div class="delete_form mt-4 mt-md-0 ">
                     <form action="/admin/dashboard/delete?_method=DELETE" method="delete" id="deleteForm">
                         <%- include('./_delete_form.ejs', { photos: photos }) %>
                         <div class="row mt-3">
@@ -37,7 +37,7 @@
     <div class="container mt-5 d-flex justify-content-center">
         <div class="row">
             <div class="col-12">
-              <div class="update_form mb-2 mx-auto">
+              <div class="update_form mb-2">
                 <form action="/admin/dashboard/update" method="post" id="updateForm">
                     <%- include('./_update_form.ejs') %>
                     <div class="row mt-2">
@@ -52,4 +52,3 @@
         </div>
     </div>
 </section>
-

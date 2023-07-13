@@ -187,11 +187,11 @@ router.post('/dashboard/update', async (req, res) => {
   } catch (error) {
     // Handle the error
     console.error(error);
-    res.status(500).send('Internal Server Error');
+    res.status(500)
   }
 });
 
-//galleries page
+//galleries page(works fine)
 router.get('/galleries', checkAuthentication, async (req, res)=>{
   try {
     const galleryPhotos = await GalleryPhoto.find();
@@ -218,7 +218,6 @@ router.post('galleries/create', async (req,res)=>{
 
     res.redirect('/admin/galleries');
   } catch (err) {
-    console.log('Něco se pokazilo');
     console.log(err);
   }
 })
@@ -262,7 +261,7 @@ router.put('galleries/addtogallery', async(req, res)=>{
 })
 
 
-//logout, redirect to homepage?
+//logout(works fine)
 router.get('/logout', (req, res) => {
   req.session.destroy();0
   res.redirect('/');

@@ -1,8 +1,4 @@
 
-@font-face {
-    font-family: 'Montserrat';
-    src: url('../modules/fonts/Montserrat/Montserrat-VariableFont_wght.ttf');
-}
 html,body{
     height: 100%;
     background-color: #f5f3f0;
@@ -16,12 +12,11 @@ html,body{
     padding-bottom: 75px;
 }
 h1, h2, h3, h4, h5{
+    font-family: "Montserrat", sans-serif;
     color: black;
     font-weight: 700;  
 }
-h1{
-    font-family: Georgia, 'Times New Roman', Times, serif;
-}
+
 #headerNavbar{
 
     background: #fcfafa;
@@ -34,13 +29,11 @@ h1{
 }
 p{
     font-size: 18px;
-    font-family: 'Montserrat';  
+    font-family: "Montserrat", sans-serif;  
     line-height: 1.6rem;
     font-weight: 700;
 }
-li{
-    font-family: 'Montserrat';
-}
+
 .nav-link, .navbar-brand{
     text-decoration: none;
     color:black
