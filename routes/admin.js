@@ -1,36 +1,47 @@
-const express = require('express')
-const router = express.Router()
-const mongoose = require('mongoose')
-const Admin = require('../models/admin')
-const Photo = require('../models/photos')
-const Gallery = require('../models/gallery')
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
+const session = require('express-session');
+const generateSessionSecret = require('../middleware/sessionSecret');
+const Admin = require('../models/admin');
+const Photo = require('../models/photos');
+const Gallery = require('../models/gallery');
 const GalleryPhoto = require('../models/galleryPhotoSchema');
-const sharp = require('sharp')
-const multer = require('multer')
-const path = require('path')
-const fs = require('fs')
-const { restart } = require('nodemon')
-const uploadPath = path.join('public' ,Photo.photoBasePath);
+const sharp = require('sharp');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const uploadPath = path.join('public', Photo.photoBasePath);
 const photoMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
 const adminUpload = multer({
   dest: uploadPath,
   fileFilter: (req, file, callback) => {
-    callback(null, photoMimeTypes.includes(file.mimetype))
+    callback(null, photoMimeTypes.includes(file.mimetype));
   },
 });
 //setting layout for this route
 router.use((req, res, next) => {
-    req.app.set('layout', 'admin/admin_layout')
-    next()
-})
+  req.app.set('layout', 'admin/admin_layout');
+  next();
+});
+
 // Define a middleware function to check if the user is authenticated
+const sessionSecret = generateSessionSecret();
+router.use(
+  session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
 const checkAuthentication = (req, res, next) => {
   console.log('checkAuthentication middleware');
   if (req.session.isAuthenticated) {
     // If the user is authenticated, allow them to proceed
     next();
   } else {
-    console.log('Redirecting to login page')
+    console.log('Redirecting to login page');
     res.redirect('/admin');
   }
 };

@@ -18,6 +18,7 @@
     "bootstrap-icons": "^1.10.3",
     "browserify": "^17.0.0",
     "busboy": "^1.6.0",
+    "connect-mongodb-session": "^3.1.1",
     "connect-pg-simple": "^8.0.0",
     "cookie-parser": "^1.4.6",
     "cube-gallery-js": "^1.0.0",
